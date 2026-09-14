@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-secondary-fixed-variant":"#3c4662","on-tertiary-fixed-variant":"#005137","on-primary-fixed-variant":"#361ad4","surface-container-high":"#dce9ff","on-tertiary-fixed":"#002114","outline-variant":"#c7c4d8","on-primary-fixed":"#120068","surface-container-lowest":"#ffffff","surface-tint":"#4f3feb","on-secondary-fixed":"#101b35","inverse-surface":"#213145","background":"#f8f9ff","surface-container-highest":"#d3e4fe","surface":"#f8f9ff","on-background":"#0b1c30","surface-variant":"#d3e4fe","surface-bright":"#f8f9ff","on-primary":"#ffffff","secondary-fixed-dim":"#bbc6e8","surface-container":"#e5eeff","tertiary-fixed":"#85f8c4","on-primary-container":"#ebe7ff","on-tertiary-container":"#99ffce","surface-container-low":"#eff4ff","secondary-container":"#d2dcff","primary-container":"#5b4df6","on-error-container":"#93000a","tertiary-fixed-dim":"#68dba9","inverse-on-surface":"#eaf1ff","on-secondary":"#ffffff","on-surface":"#0b1c30","outline":"#777587","primary-fixed":"#e3dfff","secondary":"#535e7b","on-surface-variant":"#464556","error":"#ba1a1a","tertiary":"#005e40","secondary-fixed":"#dae2ff","on-error":"#ffffff","primary-fixed-dim":"#c4c0ff","surface-dim":"#cbdbf5","on-tertiary":"#ffffff","error-container":"#ffdad6","primary":"#412dde","inverse-primary":"#c4c0ff","tertiary-container":"#007954","on-secondary-container":"#56607e"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"margin-mobile":"1rem","gutter-mobile":"1rem","gutter":"1.5rem","space-xs":"0.25rem","space-md":"1rem","space-lg":"1.5rem","space-xl":"2.5rem","space-sm":"0.5rem","margin":"2rem"},"fontFamily":{"body-lg":["Plus Jakarta Sans"],"headline-sm":["Space Grotesk"],"body-sm":["Plus Jakarta Sans"],"headline-xl-mobile":["Space Grotesk"],"headline-lg-mobile":["Space Grotesk"],"headline-lg":["Space Grotesk"],"label-sm":["Plus Jakarta Sans"],"headline-xl":["Space Grotesk"],"headline-md":["Space Grotesk"],"body-md":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"]},"fontSize":{"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"headline-sm":["18px",{"lineHeight":"24px","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"20px","fontWeight":"400"}],"headline-xl-mobile":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.03em","fontWeight":"700"}],"headline-md":["22px",{"lineHeight":"28px","fontWeight":"600"}],"body-md":["15px",{"lineHeight":"24px","fontWeight":"400"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}]}}}}</script></head><body class="bg-background font-body-md text-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between"><div class="flex flex-col"><div class="h-16 px-space-md flex items-center gap-space-sm"><img alt="StudyPulse Brand Icon" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xf8n8ZQwr2bd4kDcOygHF0k3rRk6PuWRwZImRDeQP-un_XjwUFGpE0pri_Vk6w6tAUtmNS58vtA1JGYy6ImxRkopsG2R9fhZ0hQDv3dxegllMoAMw-RZP4XB-0oTwmQwIfPaMQr-DFhXCi50ywq8SPDMU6qeUXY0Rsz5dpfVpgqchTwpzbCU7PQ7ZF7NqGA-D9BPUdPmbcYtG71t66pw3-d9yn1fQk1T35zqJhIiFqqyUO_ja-q_aeC7ry"/><span class="font-headline-sm text-headline-sm text-primary tracking-tight">StudyPulse</span></div><nav class="px-space-sm py-space-md space-y-space-xs flex flex-col" data-active-classes="bg-primary-container text-on-primary font-label-lg text-label-lg rounded-lg shadow-sm"><a class="px-space-md py-space-sm rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="dashboard" href="#">Dashboard</a><a class="px-space-md py-space-sm rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="lessons" href="#">Lessons</a><a class="px-space-md py-space-sm rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="exams-and-past-papers" href="#">Exams &amp; Past Papers</a><a class="px-space-md py-space-sm rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="performance-analytics" href="#">Performance Analytics</a><a aria-current="page" class="px-space-md py-space-sm transition-colors bg-primary-container text-on-primary font-label-lg text-label-lg rounded-lg shadow-sm" data-path="study-groups-and-collab" href="#">Study Groups &amp; Collab</a><a class="px-space-md py-space-sm rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="ai-study-assistant" href="#">AI Study Assistant</a></nav></div><div class="p-space-md"><div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-label-md text-label-md text-on-surface">Academic Term</span><span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded-full bg-secondary-container text-on-secondary-container">Active</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">Term 2 Finals Prep</p></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-sm"><div class="flex items-center bg-surface-container-low px-space-md py-space-xs rounded-lg gap-space-xs text-on-surface-variant w-72"><span class="material-symbols-outlined text-[18px]">search</span><input class="bg-transparent text-body-sm font-body-sm text-on-surface outline-none placeholder:text-outline w-full" placeholder="Search topics, questions, past papers..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container text-on-primary-fixed font-label-md text-label-md"><span class="text-base leading-none">🔥</span><span>14-day streak</span></div><div class="flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md"><span class="text-base leading-none">⚡</span><span>Midterm in 12 days</span></div><button class="relative p-space-xs rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-primary"></span></button><div class="h-6 w-px bg-outline-variant"></div><button class="flex items-center gap-space-sm px-space-sm py-1.5 rounded-lg hover:bg-surface-container-low transition-colors text-left focus:outline-none"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1L8WFo-mBDL9i-zWMDD7A3FwtonEsEz2nPorHrxciq8JruCbrL61YLWAGGdHkIXcgXdNR6LQBQduxbsNKBzncu8LZVj6DbL-ztN_WG_AWmdEGvByBQmy70DvdC-fAXfDxIBLoKxsBRH17DbTIOjDnzysFjbGpK1L2AwpyXM8Mgsf93OZwAVfft6PVxgYhrFx9dsEb7MXzBtUr2o2kablt0h_4MtLSiXwv8OVO45GC9XicOXgod4ZRKA"/><div class="flex flex-col"><span class="font-label-md text-label-md text-on-surface leading-tight">Amina K.</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-tight">(Grade 11)</span></div><span class="material-symbols-outlined text-[20px] text-on-surface-variant">expand_more</span></button></div></header><main class="w-full pt-16 bg-background"><div class="flex flex-col w-full">
+<!-- Toast Feedback Notification -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-16 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-space-sm bg-inverse-surface text-inverse-on-surface px-space-lg py-space-md rounded-xl shadow-xl" id="saveToast">
+<span class="material-symbols-outlined text-tertiary-fixed text-[20px]">check_circle</span>
+<span class="font-label-lg text-label-lg">Preferences saved successfully</span>
+<button class="ml-space-md text-outline-variant hover:text-inverse-on-surface" onclick="dismissToast()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="max-w-[1280px] mx-auto w-full px-space-md lg:px-space-xl py-space-lg flex flex-col gap-space-lg">
+<!-- Breadcrumbs & Meta Bar -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+<span>StudyPulse</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Amina K.</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-label-lg text-label-lg">Account Settings &amp; Preferences</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-tertiary tracking-wide uppercase">All systems synchronized • SSL Secured</span>
+</div>
+</div>
+<!-- Header Block with Actions -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md pb-space-xs">
+<div class="flex flex-col gap-space-xs max-w-3xl">
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Settings &amp; Preferences</h1>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Manage your academic profile, visual preferences, AI data privacy ethics, linked school accounts, and group visibility.
+        </p>
+</div>
+<div class="flex items-center gap-space-sm self-start lg:self-auto shrink-0">
+<button class="px-space-lg h-11 rounded-lg font-label-lg text-label-lg text-secondary hover:bg-surface-container transition-colors" type="button">
+          Discard Changes
+        </button>
+<button class="px-space-lg h-11 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-lg text-label-lg flex items-center gap-space-xs shadow-[0_4px_14px_rgba(91,77,246,0.3)] hover:shadow-[0_6px_20px_rgba(91,77,246,0.45)] active:scale-[0.98] transition-all" onclick="triggerSaveAnimation()" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+<span>Save Preferences</span>
+</button>
+</div>
+</div>
+<!-- Main Two-Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Left Column: Navigation Quick Links -->
+<div class="lg:col-span-3 lg:sticky lg:top-20 flex flex-col gap-space-md">
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-[0_2px_8px_-2px_rgba(15,26,52,0.04)] flex flex-col gap-1">
+<a class="settings-nav-item flex items-center gap-space-sm px-space-md py-space-sm rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm transition-all" data-target="section-profile" href="#section-profile">
+<span class="material-symbols-outlined text-[18px]">badge</span>
+<span class="truncate">Profile &amp; Student ID</span>
+</a>
+<a class="settings-nav-item flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-lg text-label-lg transition-all" data-target="section-appearance" href="#section-appearance">
+<span class="material-symbols-outlined text-[18px]">palette</span>
+<span class="truncate">Appearance &amp; Accessibility</span>
+</a>
+<a class="settings-nav-item flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-lg text-label-lg transition-all" data-target="section-privacy" href="#section-privacy">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span class="truncate">Data Privacy &amp; AI Ethics</span>
+</a>
+<a class="settings-nav-item flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-lg text-label-lg transition-all" data-target="section-security" href="#section-security">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+<span class="truncate">Password &amp; Security</span>
+</a>
+<a class="settings-nav-item flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-lg text-label-lg transition-all" data-target="section-connected" href="#section-connected">
+<span class="material-symbols-outlined text-[18px]">link</span>
+<span class="truncate">Connected Accounts</span>
+</a>
+<a class="settings-nav-item flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-lg text-label-lg transition-all" data-target="section-collab" href="#section-collab">
+<span class="material-symbols-outlined text-[18px]">group</span>
+<span class="truncate">Squad &amp; Visibility</span>
+</a>
+<a class="settings-nav-item flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-lg text-label-lg transition-all" data-target="section-notifications" href="#section-notifications">
+<span class="material-symbols-outlined text-[18px]">notifications_active</span>
+<span class="truncate">Study Reminders</span>
+</a>
+</div>
+<!-- Academic Snapshot Card -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Sync Integrity</span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-tertiary bg-surface-container-lowest px-space-xs py-0.5 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> 100%
+            </span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full w-full"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            4 of 4 academic tracks synchronized with Westview High LMS.
+          </p>
+</div>
+</div>
+<!-- Right Column: Settings Sections -->
+<div class="lg:col-span-9 flex flex-col gap-space-xl">
+<!-- Section 1: Profile & Student Identity -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg lg:p-space-xl shadow-[0_2px_8px_-2px_rgba(15,26,52,0.04)] flex flex-col gap-space-lg scroll-mt-24" id="section-profile">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">badge</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Profile &amp; Student Identity</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Your verified academic record visible to instructors and study squad members.</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-space-sm py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-semibold">SSO Synced</span>
+</div>
+<!-- Avatar Section -->
+<div class="flex flex-col sm:flex-row items-center gap-space-lg p-space-md bg-surface-container-low rounded-xl">
+<div class="relative shrink-0">
+<img alt="Amina K." class="w-24 h-24 rounded-full object-cover shadow-sm ring-4 ring-surface-container-lowest" src="https://lh3.googleusercontent.com/aida/AEtjO1WiLZoSrMfpzgLJADed8EW3wQi0kyqpx88LkR3KT0adqybtAUGBkckwWAC4TFH1LhDz0IovsoQt3o24HrFtyBk8AsU6yv9sTjs721fOqfSXypoSOiGinnmbKEj9ssmh4edlA_-gpF-F2cSqBgAm2WOhztzzF290ldy4sPG2aCOAvj7Nu3zECcyigGcJgG_fpTmehN_I8Mj-iwB2YfWgwspER4MXFSPek7RwOayx3mzOPQWi0u-v-SDQevOE"/>
+<span class="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow">
+<span class="material-symbols-outlined text-[14px]">school</span>
+</span>
+</div>
+<div class="flex flex-col gap-space-xs text-center sm:text-left flex-1">
+<div class="flex flex-wrap items-center justify-center sm:justify-start gap-space-sm">
+<button class="px-space-md py-space-xs rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-colors" type="button">
+                  Upload New Photo
+                </button>
+<button class="px-space-md py-space-xs rounded-lg bg-surface-container-lowest text-error font-label-md text-label-md hover:bg-error-container transition-colors" type="button">
+                  Remove Photo
+                </button>
+</div>
+<span class="font-body-sm text-body-sm text-outline">Recommended: 400x400px JPG or PNG. Institutional avatar auto-updates upon request.</span>
+</div>
+</div>
+<!-- Form Fields Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface">Full Student Name</label>
+<input class="h-11 px-space-md rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md border-0 ring-1 ring-outline-variant focus:ring-2 focus:ring-primary focus:outline-none transition-shadow" type="text" value="Amina K."/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface">Academic Email</label>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-tertiary">
+<span class="material-symbols-outlined text-[14px]">verified</span> Verified
+                </span>
+</div>
+<input class="h-11 px-space-md rounded-lg bg-surface-container-low text-on-surface-variant font-body-md text-body-md border-0 focus:outline-none cursor-not-allowed" readonly="" type="email" value="amina.k@westviewprep.edu"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface">Academic Grade</label>
+<div class="relative">
+<select class="w-full h-11 px-space-md pr-10 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md border-0 ring-1 ring-outline-variant focus:ring-2 focus:ring-primary focus:outline-none transition-shadow appearance-none">
+<option selected="">Grade 11 (Junior Year)</option>
+<option>Grade 10 (Sophomore Year)</option>
+<option>Grade 12 (Senior Year)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface">Academic Stream / Track</label>
+<div class="relative">
+<select class="w-full h-11 px-space-md pr-10 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md border-0 ring-1 ring-outline-variant focus:ring-2 focus:ring-primary focus:outline-none transition-shadow appearance-none">
+<option selected="">Natural Sciences (STEM &amp; Pre-Med Track)</option>
+<option>Pure Mathematics &amp; Computation</option>
+<option>Humanities &amp; Social Sciences</option>
+<option>International Baccalaureate Diploma</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs md:col-span-2">
+<label class="font-label-md text-label-md text-on-surface">School / Registered Institution</label>
+<div class="flex items-center justify-between h-11 px-space-md rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-primary">account_balance</span>
+<span>Westview High &amp; STEM Academy</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Managed by District 4 SSO</span>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs md:col-span-2">
+<label class="font-label-md text-label-md text-on-surface">Active Target Exams &amp; Milestones</label>
+<div class="flex flex-wrap items-center gap-space-xs p-space-sm rounded-lg bg-surface-container-low min-h-[48px]">
+<span class="inline-flex items-center gap-1.5 px-space-md py-1 rounded-full bg-surface-container-lowest text-primary font-label-md text-label-md shadow-sm">
+<span>AP Chemistry (May 2025)</span>
+<button class="hover:text-error transition-colors" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-space-md py-1 rounded-full bg-surface-container-lowest text-primary font-label-md text-label-md shadow-sm">
+<span>AP Calculus BC (May 2025)</span>
+<button class="hover:text-error transition-colors" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-space-md py-1 rounded-full bg-surface-container-lowest text-primary font-label-md text-label-md shadow-sm">
+<span>SAT Math Prep</span>
+<button class="hover:text-error transition-colors" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<button class="inline-flex items-center gap-1 px-space-md py-1 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Add Exam</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Appearance & Accessibility Preferences -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg lg:p-space-xl shadow-[0_2px_8px_-2px_rgba(15,26,52,0.04)] flex flex-col gap-space-lg scroll-mt-24" id="section-appearance">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">palette</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Appearance &amp; Accessibility Preferences</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Tailor legibility, sensory load, and reading rhythm for long-haul study sessions.</p>
+</div>
+</div>
+<!-- Theme Selection Cards -->
+<div class="flex flex-col gap-space-sm">
+<label class="font-label-md text-label-md text-on-surface">Interface Theme Mode</label>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-md">
+<!-- Light Theme Card (Active) -->
+<div class="theme-card cursor-pointer p-space-md rounded-xl bg-surface-container-low ring-2 ring-primary transition-all flex flex-col gap-space-sm relative" onclick="selectTheme(this)">
+<div class="h-20 w-full rounded-lg bg-background p-2 flex flex-col gap-1.5 shadow-inner">
+<div class="h-3 w-1/3 bg-primary-container rounded"></div>
+<div class="h-2 w-full bg-surface-container-high rounded"></div>
+<div class="h-2 w-2/3 bg-surface-container rounded"></div>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface">Light Theme</span>
+<span class="material-symbols-outlined text-primary text-[20px] check-icon">check_circle</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Recommended for daytime library &amp; classroom study.</span>
+</div>
+<!-- Dark Charcoal Mode -->
+<div class="theme-card cursor-pointer p-space-md rounded-xl bg-surface-container-lowest hover:bg-surface-container-low ring-1 ring-outline-variant transition-all flex flex-col gap-space-sm relative" onclick="selectTheme(this)">
+<div class="h-20 w-full rounded-lg bg-inverse-surface p-2 flex flex-col gap-1.5 shadow-inner">
+<div class="h-3 w-1/3 bg-primary-fixed-dim rounded"></div>
+<div class="h-2 w-full bg-secondary rounded"></div>
+<div class="h-2 w-2/3 bg-secondary rounded"></div>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface">Dark Charcoal</span>
+<span class="material-symbols-outlined text-outline-variant text-[20px] check-icon">radio_button_unchecked</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Reduces glare during late-night exam prep sprints.</span>
+</div>
+<!-- System Default Card -->
+<div class="theme-card cursor-pointer p-space-md rounded-xl bg-surface-container-lowest hover:bg-surface-container-low ring-1 ring-outline-variant transition-all flex flex-col gap-space-sm relative" onclick="selectTheme(this)">
+<div class="h-20 w-full rounded-lg bg-gradient-to-r from-background to-inverse-surface p-2 flex flex-col gap-1.5 shadow-inner">
+<div class="h-3 w-1/3 bg-primary-container rounded"></div>
+<div class="h-2 w-full bg-surface-container-high rounded"></div>
+<div class="h-2 w-2/3 bg-surface-container rounded"></div>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface">System Default</span>
+<span class="material-symbols-outlined text-outline-variant text-[20px] check-icon">radio_button_unchecked</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Automatically matches your OS circadian rhythm.</span>
+</div>
+</div>
+</div>
+<!-- Font Scaling & Accessibility Toggles -->
+<div class="flex flex-col gap-space-md pt-space-xs">
+<div class="p-space-md bg-surface-container-low rounded-xl flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div>
+<span class="font-label-lg text-label-lg text-on-surface">Reading &amp; Diagram Font Scale</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Adjust textbook summaries and past paper rendering sizes.</p>
+</div>
+<span class="px-space-md py-1 rounded-full bg-surface-container-lowest text-primary font-label-sm text-label-sm shadow-sm" id="fontSizeLabel">Standard (15px)</span>
+</div>
+<!-- Stepped Slider -->
+<div class="flex flex-col gap-space-xs">
+<input class="w-full accent-primary cursor-pointer h-2 bg-surface-container-high rounded-full" id="fontSizeSlider" max="4" min="1" oninput="updateFontSize(this.value)" type="range" value="2"/>
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant px-1">
+<span>Small (13px)</span>
+<span class="text-primary font-semibold">Standard (15px)</span>
+<span>Large (18px)</span>
+<span>Extra Large (22px)</span>
+</div>
+</div>
+</div>
+<!-- Toggles List -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex flex-col pr-space-md">
+<span class="font-label-lg text-label-lg text-on-surface">OpenDyslexic Font Mode</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Weights letter bottoms to prevent rotation and inversion during heavy textbook reading.</span>
+</div>
+<button aria-pressed="false" class="w-12 h-7 rounded-full bg-surface-container-high relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-surface-container-lowest shadow-sm block transition-transform"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex flex-col pr-space-md">
+<span class="font-label-lg text-label-lg text-on-surface">High Contrast Formula &amp; Graph Rendering</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Increases line-weight and stroke vibrancy on chemical structures, integrals, and coordinate planes.</span>
+</div>
+<button aria-pressed="true" class="w-12 h-7 rounded-full bg-primary-container relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-on-primary shadow-sm block translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex flex-col pr-space-md">
+<span class="font-label-lg text-label-lg text-on-surface">Ambient Focus Beats &amp; Audio Metronome</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Plays gentle 40Hz binaural frequencies during timed diagnostic tests to support deep alpha-state focus.</span>
+</div>
+<button aria-pressed="true" class="w-12 h-7 rounded-full bg-primary-container relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-on-primary shadow-sm block translate-x-5 transition-transform"></span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Data Privacy, Student Rights & AI Learning Ethics -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg lg:p-space-xl shadow-[0_2px_8px_-2px_rgba(15,26,52,0.04)] flex flex-col gap-space-lg scroll-mt-24" id="section-privacy">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">verified_user</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Data Privacy, Student Rights &amp; AI Ethics</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Full transparency over how your diagnostic performance trains your personal tutor.</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-space-md py-1 rounded-full bg-secondary-container text-on-secondary-container font-semibold self-start sm:self-auto shrink-0">
+              FERPA &amp; GDPR-K Compliant
+            </span>
+</div>
+<!-- Zero Model Retention Guarantee Callout -->
+<div class="p-space-md rounded-xl bg-primary-fixed/30 flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">shield</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Zero Model Retention Guarantee</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                Your private chat inquiries, uploaded handwritten notes, homework snapshots, and teacher annotations are cryptographically sandboxed. They are never ingested into global public foundation models or shared with commercial aggregators.
+              </p>
+</div>
+</div>
+<!-- Adaptive Grounding Toggles -->
+<div class="flex flex-col gap-space-sm">
+<span class="font-label-md text-label-md text-on-surface tracking-wide uppercase">Adaptive Personalization Controls</span>
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex flex-col pr-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface">Historical Exam Mistake Diagnosis</span>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-bold">Recommended</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Enables PulseAI to map mistake patterns across past papers to synthesize custom remedial flashcards.</span>
+</div>
+<button aria-pressed="true" class="w-12 h-7 rounded-full bg-primary-container relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-on-primary shadow-sm block translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex flex-col pr-space-md">
+<span class="font-label-lg text-label-lg text-on-surface">Contribute Anonymized Response Latencies</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Helps calibrate national difficulty curves for AP Chem and SAT math tests without exposing identity.</span>
+</div>
+<button aria-pressed="true" class="w-12 h-7 rounded-full bg-primary-container relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-on-primary shadow-sm block translate-x-5 transition-transform"></span>
+</button>
+</div>
+</div>
+<!-- Ingestion Permissions -->
+<div class="flex flex-col gap-space-sm">
+<span class="font-label-md text-label-md text-on-surface tracking-wide uppercase">Connected App Ingestion Permissions</span>
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex flex-col pr-space-md">
+<span class="font-label-lg text-label-lg text-on-surface">Read Course Syllabi &amp; Deadlines</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Import upcoming midterms and lab assignment dates from Canvas LMS automatically.</span>
+</div>
+<button aria-pressed="true" class="w-12 h-7 rounded-full bg-primary-container relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-on-primary shadow-sm block translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex flex-col pr-space-md">
+<span class="font-label-lg text-label-lg text-on-surface">Push Mock Schedules to Google Calendar</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Add recommended 45-minute revision blocks directly onto your linked academic calendar.</span>
+</div>
+<button aria-pressed="true" class="w-12 h-7 rounded-full bg-primary-container relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-on-primary shadow-sm block translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex flex-col pr-space-md">
+<span class="font-label-lg text-label-lg text-on-surface">School District Public Leaderboard Broadcast</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Publish daily XP and streak positions to Westview High public hallway monitor displays.</span>
+</div>
+<button aria-pressed="false" class="w-12 h-7 rounded-full bg-surface-container-high relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-surface-container-lowest shadow-sm block transition-transform"></span>
+</button>
+</div>
+</div>
+<!-- Data Autonomy Actions -->
+<div class="pt-space-sm flex flex-col sm:flex-row items-center justify-between gap-space-md bg-surface-container-low p-space-md rounded-xl">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">folder_zip</span>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Export Your Data Archive</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Download all personal notes, question bank history, and mastery scores in JSON &amp; PDF format.</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm w-full sm:w-auto justify-end">
+<button class="px-space-md py-space-xs rounded-lg bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center gap-1 shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">download</span>
+<span>Download Archive</span>
+</button>
+<button class="text-error hover:underline font-label-md text-label-md px-space-xs" type="button">
+                Request Diagnostic Purge
+              </button>
+</div>
+</div>
+</section>
+<!-- Section 4: Password, Authentication & Device Security -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg lg:p-space-xl shadow-[0_2px_8px_-2px_rgba(15,26,52,0.04)] flex flex-col gap-space-lg scroll-mt-24" id="section-security">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">lock</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Password &amp; Authentication Security</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Protect exam drafts and synchronized school credentials.</p>
+</div>
+</div>
+<!-- Password Reset Sub-Form -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface">Current Password</label>
+<input class="h-11 px-space-md rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md ring-1 ring-outline-variant focus:ring-2 focus:ring-primary focus:outline-none transition-shadow" type="password" value="••••••••••••"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface">New Password</label>
+<input class="h-11 px-space-md rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md ring-1 ring-outline-variant focus:ring-2 focus:ring-primary focus:outline-none transition-shadow" placeholder="At least 8 characters" type="password"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface">Confirm New Password</label>
+<input class="h-11 px-space-md rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md ring-1 ring-outline-variant focus:ring-2 focus:ring-primary focus:outline-none transition-shadow" placeholder="Repeat new password" type="password"/>
+</div>
+</div>
+<!-- Strength Meter -->
+<div class="flex flex-col gap-1.5 p-space-sm bg-surface-container-low rounded-lg">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface-variant">Password Strength Assessment</span>
+<span class="text-tertiary font-bold">Strong (Includes uppercase, symbols &amp; digits)</span>
+</div>
+<div class="grid grid-cols-4 gap-1.5 h-1.5 w-full">
+<div class="bg-tertiary rounded-full"></div>
+<div class="bg-tertiary rounded-full"></div>
+<div class="bg-tertiary rounded-full"></div>
+<div class="bg-tertiary rounded-full"></div>
+</div>
+</div>
+<!-- Two-Factor Authentication Box -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-md p-space-md rounded-xl bg-surface-container-low">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed shrink-0">
+<span class="material-symbols-outlined text-[24px]">phonelink_lock</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface">Two-Factor Authentication (2FA)</span>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-bold">Enabled</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Configured via Google Authenticator on iPhone 15 • Backup codes generated.</span>
+</div>
+</div>
+<button class="px-space-md py-space-xs rounded-lg bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md shrink-0 shadow-sm transition-colors" type="button">
+              Manage 2FA Keys
+            </button>
+</div>
+<!-- Active Devices Section -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface tracking-wide uppercase">Active Student Devices &amp; Sessions</span>
+<button class="text-error hover:underline font-label-sm text-label-sm" type="button">
+                Log Out of All Other Devices
+              </button>
+</div>
+<div class="divide-y divide-surface-container rounded-xl bg-surface-container-low overflow-hidden">
+<div class="flex items-center justify-between p-space-md">
+<div class="flex items-center gap-space-md">
+<span class="material-symbols-outlined text-primary text-[28px]">laptop_mac</span>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface">MacBook Pro 14'' (macOS Sonoma)</span>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-bold">Current Device</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">San Francisco, US • Chrome 124.0 • Active right now</span>
+</div>
+</div>
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary" title="Active now"></span>
+</div>
+<div class="flex items-center justify-between p-space-md">
+<div class="flex items-center gap-space-md">
+<span class="material-symbols-outlined text-on-surface-variant text-[28px]">tablet_mac</span>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">iPad Air 5th Gen (Study Lounge)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">San Francisco, US • StudyPulse iOS App 4.2 • 2 hours ago</span>
+</div>
+</div>
+<button class="font-label-md text-label-md text-outline hover:text-error transition-colors" type="button">
+                  Revoke
+                </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 5: Connected Academic Accounts -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg lg:p-space-xl shadow-[0_2px_8px_-2px_rgba(15,26,52,0.04)] flex flex-col gap-space-lg scroll-mt-24" id="section-connected">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">link</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Connected Accounts &amp; Course Tooling</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Bridges between your school LMS, note-taking hubs, and symbolic computation engines.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Google Workspace -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between gap-space-md">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-sm text-[#4285F4]">
+<span class="material-symbols-outlined text-[24px]">cloud_sync</span>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-on-surface">Google Workspace</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate max-w-[180px]">amina.k@westviewprep.edu</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-bold">Synced</span>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-body-sm text-body-sm text-outline">Last sync: 10 mins ago</span>
+<button class="text-error hover:underline font-label-md text-label-md" type="button">Disconnect</button>
+</div>
+</div>
+<!-- Canvas LMS -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between gap-space-md">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-sm text-[#E63946]">
+<span class="material-symbols-outlined text-[24px]">school</span>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-on-surface">Canvas LMS</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate max-w-[180px]">Westview Student Portal</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-bold">4 Courses</span>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-body-sm text-body-sm text-outline">Assignments auto-pulling</span>
+<button class="text-primary hover:underline font-label-md text-label-md" type="button">Configure</button>
+</div>
+</div>
+<!-- Anki Flashcard Sync -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between gap-space-md">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-sm text-primary">
+<span class="material-symbols-outlined text-[24px]">style</span>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-on-surface">Anki Sync Hub</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Auto .apkg export</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-bold">Active</span>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-body-sm text-body-sm text-outline">1,240 cards synced</span>
+<button class="text-primary hover:underline font-label-md text-label-md" type="button">Sync Now</button>
+</div>
+</div>
+<!-- Desmos & Wolfram -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between gap-space-md">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-sm text-[#FF5A5F]">
+<span class="material-symbols-outlined text-[24px]">calculate</span>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-on-surface">Wolfram &amp; Desmos</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Symbolic Solver API</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-surface-container-high text-on-surface font-bold">Ready</span>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-body-sm text-body-sm text-outline">AP Calculus BC solver connected</span>
+<button class="text-error hover:underline font-label-md text-label-md" type="button">Revoke</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 6: Study Squad & Collaboration Visibility -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg lg:p-space-xl shadow-[0_2px_8px_-2px_rgba(15,26,52,0.04)] flex flex-col gap-space-lg scroll-mt-24" id="section-collab">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">group</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Study Squad &amp; Collaboration Visibility</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Control real-time presence and peer interaction limits during intensive review cycles.</p>
+</div>
+</div>
+<!-- Radio Options for Study Presence -->
+<div class="flex flex-col gap-space-sm">
+<label class="font-label-md text-label-md text-on-surface">Who can see when you are currently studying?</label>
+<div class="flex flex-col gap-space-xs">
+<label class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-center gap-space-sm">
+<input checked="" class="w-4 h-4 accent-primary" name="presence" type="radio"/>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Everyone in My Study Squad</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Squad members can see active subject module and invite you to instant peer huddles.</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[20px]">groups</span>
+</label>
+<label class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-center gap-space-sm">
+<input class="w-4 h-4 accent-primary" name="presence" type="radio"/>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Only Squad Co-Moderators</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Restricts live notifications to student leads organizing exam cram dates.</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px]">admin_panel_settings</span>
+</label>
+<label class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-center gap-space-sm">
+<input class="w-4 h-4 accent-primary" name="presence" type="radio"/>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Invisible (Deep Solo Study Mode)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">You appear offline to all peers, disabling incoming calls and real-time co-review prompts.</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px]">visibility_off</span>
+</label>
+</div>
+</div>
+<!-- Squad Feature Toggles -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex flex-col pr-space-md">
+<span class="font-label-lg text-label-lg text-on-surface">Live Whiteboard &amp; Scratchpad Sharing</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Allows squad members to observe your calculus derivations on the shared infinite canvas.</span>
+</div>
+<button aria-pressed="true" class="w-12 h-7 rounded-full bg-primary-container relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-on-primary shadow-sm block translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex flex-col pr-space-md">
+<span class="font-label-lg text-label-lg text-on-surface">Share Mock Test Diagnostic Scores with Squad</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Keep individual scores private; only aggregate cohort mastery percentiles are posted.</span>
+</div>
+<button aria-pressed="false" class="w-12 h-7 rounded-full bg-surface-container-high relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-surface-container-lowest shadow-sm block transition-transform"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex flex-col pr-space-md">
+<span class="font-label-lg text-label-lg text-on-surface">Ghost Mode During Finals Sprint (Next 12 Days)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Mutes peer ping notifications while keeping your 14-day study streak fully recorded.</span>
+</div>
+<button aria-pressed="false" class="w-12 h-7 rounded-full bg-surface-container-high relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-surface-container-lowest shadow-sm block transition-transform"></span>
+</button>
+</div>
+</div>
+</section>
+<!-- Section 7: Notifications & Study Reminders -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg lg:p-space-xl shadow-[0_2px_8px_-2px_rgba(15,26,52,0.04)] flex flex-col gap-space-lg scroll-mt-24" id="section-notifications">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">notifications_active</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Notifications &amp; Study Reminders</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Customize push schedules, streak milestone alerts, and exam countdowns.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low">
+<div class="flex flex-col pr-space-sm">
+<span class="font-label-lg text-label-lg text-on-surface">Daily Streak At-Risk Alerts</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Notifies you at 7:30 PM if you haven't reviewed daily flashcards yet.</span>
+</div>
+<button aria-pressed="true" class="w-12 h-7 rounded-full bg-primary-container relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-on-primary shadow-sm block translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low">
+<div class="flex flex-col pr-space-sm">
+<span class="font-label-lg text-label-lg text-on-surface">Mock Exam Countdown Pings</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Alerts you at 7-day, 3-day, and 24-hour milestones before scheduled trials.</span>
+</div>
+<button aria-pressed="true" class="w-12 h-7 rounded-full bg-primary-container relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-on-primary shadow-sm block translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low">
+<div class="flex flex-col pr-space-sm">
+<span class="font-label-lg text-label-lg text-on-surface">Squad Huddle Invites</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Receive alerts when chemistry study group initiates a live voice room.</span>
+</div>
+<button aria-pressed="true" class="w-12 h-7 rounded-full bg-primary-container relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-on-primary shadow-sm block translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low">
+<div class="flex flex-col pr-space-sm">
+<span class="font-label-lg text-label-lg text-on-surface">Weekly Performance Digest</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Summary email on Sunday mornings showing accuracy gains and review pace.</span>
+</div>
+<button aria-pressed="true" class="w-12 h-7 rounded-full bg-primary-container relative p-0.5 transition-colors focus:outline-none shrink-0" onclick="toggleSwitch(this)" type="button">
+<span class="w-6 h-6 rounded-full bg-on-primary shadow-sm block translate-x-5 transition-transform"></span>
+</button>
+</div>
+</div>
+</section>
+<!-- Bottom Page Action Sticky Bar on Mobile / Standard on Desktop -->
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px] text-tertiary">check</span>
+<span>All local changes staged. Click save to apply network sync.</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="px-space-md h-10 rounded-lg text-secondary hover:bg-surface-container font-label-md text-label-md transition-colors" type="button">
+              Reset to Defaults
+            </button>
+<button class="px-space-lg h-10 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md flex items-center gap-space-xs shadow-md transition-all" onclick="triggerSaveAnimation()" type="button">
+<span class="material-symbols-outlined text-[16px]">check</span>
+<span>Save Preferences</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+    // Toggle switch interaction
+    function toggleSwitch(btn) {
+      const isPressed = btn.getAttribute('aria-pressed') === 'true';
+      const circle = btn.querySelector('span');
+      if (isPressed) {
+        btn.setAttribute('aria-pressed', 'false');
+        btn.classList.remove('bg-primary-container');
+        btn.classList.add('bg-surface-container-high');
+        circle.classList.remove('translate-x-5', 'bg-on-primary');
+        circle.classList.add('bg-surface-container-lowest');
+      } else {
+        btn.setAttribute('aria-pressed', 'true');
+        btn.classList.remove('bg-surface-container-high');
+        btn.classList.add('bg-primary-container');
+        circle.classList.add('translate-x-5', 'bg-on-primary');
+        circle.classList.remove('bg-surface-container-lowest');
+      }
+    }
+
+    // Font size live preview label
+    function updateFontSize(val) {
+      const label = document.getElementById('fontSizeLabel');
+      const textMap = {
+        '1': 'Small (13px)',
+        '2': 'Standard (15px)',
+        '3': 'Large (18px)',
+        '4': 'Extra Large (22px)'
+      };
+      label.textContent = textMap[val] || 'Standard (15px)';
+    }
+
+    // Theme card selection
+    function selectTheme(selectedCard) {
+      document.querySelectorAll('.theme-card').forEach(card => {
+        card.classList.remove('ring-2', 'ring-primary', 'bg-surface-container-low');
+        card.classList.add('ring-1', 'ring-outline-variant', 'bg-surface-container-lowest');
+        const icon = card.querySelector('.check-icon');
+        if (icon) {
+          icon.textContent = 'radio_button_unchecked';
+          icon.classList.remove('text-primary');
+          icon.classList.add('text-outline-variant');
+        }
+      });
+      selectedCard.classList.remove('ring-1', 'ring-outline-variant', 'bg-surface-container-lowest');
+      selectedCard.classList.add('ring-2', 'ring-primary', 'bg-surface-container-low');
+      const activeIcon = selectedCard.querySelector('.check-icon');
+      if (activeIcon) {
+        activeIcon.textContent = 'check_circle';
+        activeIcon.classList.remove('text-outline-variant');
+        activeIcon.classList.add('text-primary');
+      }
+    }
+
+    // Save Toast trigger
+    function triggerSaveAnimation() {
+      const toast = document.getElementById('saveToast');
+      toast.classList.remove('translate-y-16', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        dismissToast();
+      }, 3500);
+    }
+
+    function dismissToast() {
+      const toast = document.getElementById('saveToast');
+      toast.classList.add('translate-y-16', 'opacity-0', 'pointer-events-none');
+      toast.classList.remove('translate-y-0', 'opacity-100');
+    }
+
+    // ScrollSpy for side navigation
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section[id]');
+      const navItems = document.querySelectorAll('.settings-nav-item');
+      let currentSectionId = '';
+
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top <= 160 && rect.bottom >= 160) {
+          currentSectionId = sec.getAttribute('id');
+        }
+      });
+
+      if (currentSectionId) {
+        navItems.forEach(item => {
+          if (item.getAttribute('data-target') === currentSectionId) {
+            item.classList.add('bg-primary-container', 'text-on-primary', 'shadow-sm');
+            item.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-low');
+          } else {
+            item.classList.remove('bg-primary-container', 'text-on-primary', 'shadow-sm');
+            item.classList.add('text-on-surface-variant', 'hover:bg-surface-container-low');
+          }
+        });
+      }
+    });
+  </script>
+</div></main></div></body></html>
