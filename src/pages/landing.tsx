@@ -1,109 +1,3 @@
-const tailwindConfig = {
-  darkMode: "class",
-  theme: {
-    extend: {
-      colors: {
-        "surface-container": "#1c1f2a",
-        primary: "#c0c1ff",
-        "primary-fixed": "#e1e0ff",
-        "primary-container": "#8083ff",
-        "on-background": "#dfe2f1",
-        "surface-container-low": "#171b26",
-        "primary-fixed-dim": "#c0c1ff",
-        surface: "#0f131d",
-        "tertiary-fixed-dim": "#4cd7f6",
-        error: "#ffb4ab",
-        "surface-variant": "#313540",
-        "surface-bright": "#353944",
-        "inverse-surface": "#dfe2f1",
-        "secondary-fixed-dim": "#4edea3",
-        outline: "#908fa0",
-        "on-error": "#690005",
-        "on-tertiary-fixed": "#001f26",
-        "surface-container-lowest": "#0a0e18",
-        "on-secondary-container": "#00311f",
-        "secondary-fixed": "#6ffbbe",
-        "tertiary-container": "#009eb9",
-        "on-surface": "#dfe2f1",
-        "on-secondary-fixed": "#002113",
-        "on-primary-fixed-variant": "#2f2ebe",
-        "inverse-primary": "#494bd6",
-        "error-container": "#93000a",
-        "on-tertiary-container": "#002f38",
-        "on-secondary": "#003824",
-        "on-primary-fixed": "#07006c",
-        secondary: "#4edea3",
-        "inverse-on-surface": "#2c303b",
-        "surface-tint": "#c0c1ff",
-        tertiary: "#4cd7f6",
-        "secondary-container": "#00a572",
-        "on-surface-variant": "#c7c4d7",
-        background: "#0f131d",
-        "on-secondary-fixed-variant": "#005236",
-        "on-error-container": "#ffdad6",
-        "outline-variant": "#464554",
-        "on-tertiary": "#003640",
-        "surface-container-highest": "#313540",
-        "on-primary-container": "#0d0096",
-        "on-primary": "#1000a9",
-        "surface-dim": "#0f131d",
-        "surface-container-high": "#262a35",
-        "on-tertiary-fixed-variant": "#004e5c",
-        "tertiary-fixed": "#acedff"
-      },
-      borderRadius: {
-        DEFAULT: "0.25rem",
-        lg: "0.5rem",
-        xl: "0.75rem",
-        full: "9999px"
-      },
-      spacing: {
-        "space-xl": "2.5rem",
-        gutter: "1.5rem",
-        "margin-mobile": "1rem",
-        "space-lg": "1.5rem",
-        "gutter-mobile": "0.75rem",
-        "space-sm": "0.5rem",
-        "space-md": "1rem",
-        "space-xs": "0.25rem",
-        margin: "2rem"
-      },
-      fontFamily: {
-        "headline-lg": ["Space Grotesk"],
-        "label-stats": ["JetBrains Mono"],
-        "display-hero": ["Space Grotesk"],
-        "body-sm": ["Inter"],
-        "headline-xl-mobile": ["Space Grotesk"],
-        "title-sm": ["Inter"],
-        "headline-xl": ["Space Grotesk"],
-        "headline-md": ["Space Grotesk"],
-        "display-hero-mobile": ["Space Grotesk"],
-        "body-lg": ["Inter"],
-        "label-code": ["JetBrains Mono"],
-        "body-md": ["Inter"]
-      },
-      fontSize: {
-        "headline-lg": ["28px", { lineHeight: "36px", letterSpacing: "-0.015em", fontWeight: "600" }],
-        "label-stats": ["11px", { lineHeight: "14px", letterSpacing: "0.08em", fontWeight: "600" }],
-        "display-hero": ["48px", { lineHeight: "56px", letterSpacing: "-0.03em", fontWeight: "700" }],
-        "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }],
-        "headline-xl-mobile": ["26px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600" }],
-        "title-sm": ["18px", { lineHeight: "24px", fontWeight: "600" }],
-        "headline-xl": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "600" }],
-        "headline-md": ["22px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "600" }],
-        "display-hero-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
-        "body-lg": ["16px", { lineHeight: "26px", fontWeight: "400" }],
-        "label-code": ["13px", { lineHeight: "18px", letterSpacing: "0.02em", fontWeight: "500" }],
-        "body-md": ["14px", { lineHeight: "22px", fontWeight: "400" }]
-      }
-    }
-  }
-};
-
-const tailwindConfigScript = `tailwind.config=${JSON.stringify(tailwindConfig)}`;
-
-const baseStyles = `@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}`;
-
 export default function Landing() {
   return (
     <>
@@ -117,11 +11,8 @@ export default function Landing() {
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet"
       />
-      <style>{baseStyles}</style>
-      <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-      <script id="tailwind-config" dangerouslySetInnerHTML={{ __html: tailwindConfigScript }} />
 
-      <div className="dark bg-background font-body-md text-body-md text-on-surface antialiased selection:bg-primary-container selection:text-white">
+      <div className="landing-theme bg-background font-body-md text-body-md text-on-surface antialiased selection:bg-primary-container selection:text-white">
         <header className="fixed top-0 w-full z-50 bg-[#0f131d]/85 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
           <div className="h-20 max-w-7xl mx-auto px-margin flex items-center justify-between gap-gutter">
             <div className="flex items-center gap-space-md">
@@ -173,13 +64,13 @@ export default function Landing() {
             {/* HERO SECTION */}
             <section className="relative w-full overflow-hidden pb-space-xl lg:pb-32">
               {/* Ambient Atmospheric Glows */}
-              <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[1100px] h-[520px] bg-gradient-to-tr from-indigo-600/20 via-primary-container/20 to-tertiary/10 blur-[130px] -z-10 pointer-events-none rounded-full" />
+              <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[1100px] h-[520px] bg-linear-to-tr from-indigo-600/20 via-primary-container/20 to-tertiary/10 blur-[130px] -z-10 pointer-events-none rounded-full" />
               <div className="absolute top-1/3 right-[-10%] w-[500px] h-[500px] bg-tertiary-container/15 blur-[120px] -z-10 pointer-events-none rounded-full" />
 
               <div className="max-w-7xl mx-auto px-margin">
                 {/* Kicker Pill */}
                 <div className="flex justify-center pt-space-lg mb-space-md">
-                  <div className="inline-flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-low border border-white/[0.08] shadow-inner shadow-white/[0.03] transition-all">
+                  <div className="inline-flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container-low border border-white/[0.08] inset-shadow-2xs transition-all">
                     <span className="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#4edea3] animate-pulse" />
                     <span className="font-label-stats text-[11px] text-primary font-bold tracking-wide uppercase">Powered by PulseAI 4.5</span>
                     <span className="text-outline-variant font-bold text-xs">•</span>
@@ -192,7 +83,7 @@ export default function Landing() {
                 <div className="max-w-4xl mx-auto text-center mb-space-lg">
                   <h1 className="font-headline-xl lg:text-[54px] lg:leading-[1.15] text-white tracking-tight mb-space-md font-bold">
                     Turn Exam Anxiety into{" "}
-                    <span className="bg-gradient-to-r from-primary via-indigo-400 to-tertiary bg-clip-text text-transparent drop-shadow-[0_0_24px_rgba(129,140,248,0.3)]">
+                    <span className="bg-linear-to-r from-primary via-indigo-400 to-tertiary bg-clip-text text-transparent drop-shadow-[0_0_24px_rgba(129,140,248,0.3)]">
                       Unfair Precision
                     </span>
                     .
@@ -324,7 +215,7 @@ export default function Landing() {
                             </div>
                           </div>
                           {/* Equation Box Preview */}
-                          <div className="p-space-sm rounded-lg bg-[#0a0e18] border border-white/[0.08] font-label-code text-xs text-on-surface overflow-x-auto shadow-inner">
+                          <div className="p-space-sm rounded-lg bg-[#0a0e18] border border-white/[0.08] font-label-code text-xs text-on-surface overflow-x-auto inset-shadow-2xs">
                             <div className="text-[#94a3b8] text-[11px] mb-1 font-sans">Formula Breakdown:</div>
                             <span className="text-tertiary font-bold">Rate = k[NO₂][CO]</span> → Step 1: NO₂ + NO₂ ⇌ N₂O₄ (fast) • Step 2: N₂O₄ + CO → NO + CO₂ (slow)
                           </div>
@@ -749,7 +640,7 @@ export default function Landing() {
             {/* BOTTOM CONVERSION CTA BANNER */}
             <section className="w-full pb-space-xl">
               <div className="max-w-7xl mx-auto px-margin">
-                <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#171b26] via-[#1c1f2a] to-indigo-950 border border-indigo-500/30 text-white p-space-xl md:p-16 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
+                <div className="relative rounded-3xl overflow-hidden bg-linear-to-br from-[#171b26] via-[#1c1f2a] to-indigo-950 border border-indigo-500/30 text-white p-space-xl md:p-16 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
                   {/* Background Ambient Circles */}
                   <div className="absolute -bottom-12 -right-12 w-96 h-96 bg-indigo-600/25 rounded-full blur-3xl pointer-events-none" />
                   <div className="absolute top-0 left-1/3 w-64 h-64 bg-tertiary/15 rounded-full blur-2xl pointer-events-none" />

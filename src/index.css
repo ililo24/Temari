@@ -1,0 +1,285 @@
+@import "tailwindcss";
+
+@theme {
+  /* ---- Colors (light "app" palette = global default) ---- */
+  --color-on-secondary-fixed-variant: #3c4662;
+  --color-on-tertiary-fixed-variant: #005137;
+  --color-on-primary-fixed-variant: #361ad4;
+  --color-surface-container-high: #dce9ff;
+  --color-on-tertiary-fixed: #002114;
+  --color-outline-variant: #c7c4d8;
+  --color-on-primary-fixed: #120068;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-tint: #4f3feb;
+  --color-on-secondary-fixed: #101b35;
+  --color-inverse-surface: #213145;
+  --color-background: #f8f9ff;
+  --color-surface-container-highest: #d3e4fe;
+  --color-surface: #f8f9ff;
+  --color-on-background: #0b1c30;
+  --color-surface-variant: #d3e4fe;
+  --color-surface-bright: #f8f9ff;
+  --color-on-primary: #ffffff;
+  --color-secondary-fixed-dim: #bbc6e8;
+  --color-surface-container: #e5eeff;
+  --color-tertiary-fixed: #85f8c4;
+  --color-on-primary-container: #ebe7ff;
+  --color-on-tertiary-container: #99ffce;
+  --color-surface-container-low: #eff4ff;
+  --color-secondary-container: #d2dcff;
+  --color-primary-container: #5b4df6;
+  --color-on-error-container: #93000a;
+  --color-tertiary-fixed-dim: #68dba9;
+  --color-inverse-on-surface: #eaf1ff;
+  --color-on-secondary: #ffffff;
+  --color-on-surface: #0b1c30;
+  --color-outline: #777587;
+  --color-primary-fixed: #e3dfff;
+  --color-secondary: #535e7b;
+  --color-on-surface-variant: #464556;
+  --color-error: #ba1a1a;
+  --color-tertiary: #005e40;
+  --color-secondary-fixed: #dae2ff;
+  --color-on-error: #ffffff;
+  --color-primary-fixed-dim: #c4c0ff;
+  --color-surface-dim: #cbdbf5;
+  --color-on-tertiary: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-primary: #412dde;
+  --color-inverse-primary: #c4c0ff;
+  --color-tertiary-container: #007954;
+  --color-on-secondary-container: #56607e;
+
+  /* ---- Border radius ---- */
+  --radius: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+
+  /* ---- Spacing ---- */
+  --spacing-margin-mobile: 1rem;
+  --spacing-gutter-mobile: 1rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2.5rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-margin: 2rem;
+
+  /* ---- Font family ---- */
+  --font-body-lg: "Plus Jakarta Sans", sans-serif;
+  --font-body-sm: "Plus Jakarta Sans", sans-serif;
+  --font-body-md: "Plus Jakarta Sans", sans-serif;
+  --font-label-sm: "Plus Jakarta Sans", sans-serif;
+  --font-label-lg: "Plus Jakarta Sans", sans-serif;
+  --font-label-md: "Plus Jakarta Sans", sans-serif;
+  --font-headline-sm: "Space Grotesk", sans-serif;
+  --font-headline-xl-mobile: "Space Grotesk", sans-serif;
+  --font-headline-lg-mobile: "Space Grotesk", sans-serif;
+  --font-headline-lg: "Space Grotesk", sans-serif;
+  --font-headline-xl: "Space Grotesk", sans-serif;
+  --font-headline-md: "Space Grotesk", sans-serif;
+
+  /* ---- Landing-only font families (no light collision) ---- */
+  --font-display-hero: "Space Grotesk", sans-serif;
+  --font-display-hero-mobile: "Space Grotesk", sans-serif;
+  --font-label-stats: "JetBrains Mono", monospace;
+  --font-title-sm: "Inter", sans-serif;
+  --font-label-code: "JetBrains Mono", monospace;
+
+  /* ---- Font size (with paired line-height / letter-spacing / font-weight) ---- */
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 28px;
+  --text-body-lg--font-weight: 400;
+
+  --text-headline-sm: 18px;
+  --text-headline-sm--line-height: 24px;
+  --text-headline-sm--font-weight: 600;
+
+  --text-body-sm: 13px;
+  --text-body-sm--line-height: 20px;
+  --text-body-sm--font-weight: 400;
+
+  --text-headline-xl-mobile: 30px;
+  --text-headline-xl-mobile--line-height: 38px;
+  --text-headline-xl-mobile--letter-spacing: -0.02em;
+  --text-headline-xl-mobile--font-weight: 700;
+
+  --text-headline-lg-mobile: 24px;
+  --text-headline-lg-mobile--line-height: 32px;
+  --text-headline-lg-mobile--letter-spacing: -0.01em;
+  --text-headline-lg-mobile--font-weight: 600;
+
+  --text-headline-lg: 32px;
+  --text-headline-lg--line-height: 40px;
+  --text-headline-lg--letter-spacing: -0.02em;
+  --text-headline-lg--font-weight: 600;
+
+  --text-label-sm: 11px;
+  --text-label-sm--line-height: 14px;
+  --text-label-sm--letter-spacing: 0.04em;
+  --text-label-sm--font-weight: 700;
+
+  --text-headline-xl: 40px;
+  --text-headline-xl--line-height: 48px;
+  --text-headline-xl--letter-spacing: -0.03em;
+  --text-headline-xl--font-weight: 700;
+
+  --text-headline-md: 22px;
+  --text-headline-md--line-height: 28px;
+  --text-headline-md--font-weight: 600;
+
+  --text-body-md: 15px;
+  --text-body-md--line-height: 24px;
+  --text-body-md--font-weight: 400;
+
+  --text-label-lg: 14px;
+  --text-label-lg--line-height: 20px;
+  --text-label-lg--letter-spacing: 0.01em;
+  --text-label-lg--font-weight: 600;
+
+  --text-label-md: 12px;
+  --text-label-md--line-height: 16px;
+  --text-label-md--letter-spacing: 0.02em;
+  --text-label-md--font-weight: 600;
+
+  /* ---- Landing-only font sizes (no light collision) ---- */
+  --text-display-hero: 48px;
+  --text-display-hero--line-height: 56px;
+  --text-display-hero--letter-spacing: -0.03em;
+  --text-display-hero--font-weight: 700;
+
+  --text-display-hero-mobile: 32px;
+  --text-display-hero-mobile--line-height: 40px;
+  --text-display-hero-mobile--letter-spacing: -0.02em;
+  --text-display-hero-mobile--font-weight: 700;
+
+  --text-label-stats: 11px;
+  --text-label-stats--line-height: 14px;
+  --text-label-stats--letter-spacing: 0.08em;
+  --text-label-stats--font-weight: 600;
+
+  --text-title-sm: 18px;
+  --text-title-sm--line-height: 24px;
+  --text-title-sm--font-weight: 600;
+
+  --text-label-code: 13px;
+  --text-label-code--line-height: 18px;
+  --text-label-code--letter-spacing: 0.02em;
+  --text-label-code--font-weight: 500;
+}
+
+/*
+  Landing dark palette. Tailwind v4 utilities resolve through CSS custom
+  properties, so re-declaring them on a scoped wrapper re-themes every
+  utility inside it at runtime — no second build, no @theme collision.
+*/
+.landing-theme {
+  --color-surface-container: #1c1f2a;
+  --color-primary: #c0c1ff;
+  --color-primary-fixed: #e1e0ff;
+  --color-primary-container: #8083ff;
+  --color-on-background: #dfe2f1;
+  --color-surface-container-low: #171b26;
+  --color-primary-fixed-dim: #c0c1ff;
+  --color-surface: #0f131d;
+  --color-tertiary-fixed-dim: #4cd7f6;
+  --color-error: #ffb4ab;
+  --color-surface-variant: #313540;
+  --color-surface-bright: #353944;
+  --color-inverse-surface: #dfe2f1;
+  --color-secondary-fixed-dim: #4edea3;
+  --color-outline: #908fa0;
+  --color-on-error: #690005;
+  --color-on-tertiary-fixed: #001f26;
+  --color-surface-container-lowest: #0a0e18;
+  --color-on-secondary-container: #00311f;
+  --color-secondary-fixed: #6ffbbe;
+  --color-tertiary-container: #009eb9;
+  --color-on-surface: #dfe2f1;
+  --color-on-secondary-fixed: #002113;
+  --color-on-primary-fixed-variant: #2f2ebe;
+  --color-inverse-primary: #494bd6;
+  --color-error-container: #93000a;
+  --color-on-tertiary-container: #002f38;
+  --color-on-secondary: #003824;
+  --color-on-primary-fixed: #07006c;
+  --color-secondary: #4edea3;
+  --color-inverse-on-surface: #2c303b;
+  --color-surface-tint: #c0c1ff;
+  --color-tertiary: #4cd7f6;
+  --color-secondary-container: #00a572;
+  --color-on-surface-variant: #c7c4d7;
+  --color-background: #0f131d;
+  --color-on-secondary-fixed-variant: #005236;
+  --color-on-error-container: #ffdad6;
+  --color-outline-variant: #464554;
+  --color-on-tertiary: #003640;
+  --color-surface-container-highest: #313540;
+  --color-on-primary-container: #0d0096;
+  --color-on-primary: #1000a9;
+  --color-surface-dim: #0f131d;
+  --color-surface-container-high: #262a35;
+  --color-on-tertiary-fixed-variant: #004e5c;
+  --color-tertiary-fixed: #acedff;
+
+  --spacing-gutter-mobile: 0.75rem;
+
+  --font-body-lg: "Inter", sans-serif;
+  --font-body-sm: "Inter", sans-serif;
+  --font-body-md: "Inter", sans-serif;
+
+  --text-body-lg: 16px;
+  --text-body-lg--line-height: 26px;
+  --text-body-lg--font-weight: 400;
+
+  --text-body-sm: 12px;
+  --text-body-sm--line-height: 18px;
+  --text-body-sm--font-weight: 400;
+
+  --text-body-md: 14px;
+  --text-body-md--line-height: 22px;
+  --text-body-md--font-weight: 400;
+
+  --text-headline-lg: 28px;
+  --text-headline-lg--line-height: 36px;
+  --text-headline-lg--letter-spacing: -0.015em;
+  --text-headline-lg--font-weight: 600;
+
+  --text-headline-xl: 36px;
+  --text-headline-xl--line-height: 44px;
+  --text-headline-xl--letter-spacing: -0.02em;
+  --text-headline-xl--font-weight: 600;
+
+  --text-headline-xl-mobile: 26px;
+  --text-headline-xl-mobile--line-height: 32px;
+  --text-headline-xl-mobile--letter-spacing: -0.01em;
+  --text-headline-xl-mobile--font-weight: 600;
+
+  --text-headline-md: 22px;
+  --text-headline-md--line-height: 28px;
+  --text-headline-md--letter-spacing: -0.01em;
+  --text-headline-md--font-weight: 600;
+}
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    overscroll-behavior: none;
+  }
+  main > :first-child {
+    margin-top: 0 !important;
+  }
+  main > :last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
