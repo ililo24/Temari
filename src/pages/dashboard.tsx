@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   useEffect(() => {
@@ -451,13 +452,13 @@ export default function Dashboard() {
                   </span>
                   <h2 className="font-headline-md text-headline-md text-on-surface">Continue Learning</h2>
                 </div>
-                <a
+                <Link
                   className="font-label-md text-label-md text-primary hover:underline flex items-center gap-1"
-                  href="#"
+                  to="/lessons"
                 >
                   <span>View All 16 Modules</span>
                   <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-                </a>
+                </Link>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md">
