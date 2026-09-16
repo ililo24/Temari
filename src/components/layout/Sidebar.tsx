@@ -1,12 +1,12 @@
 import { NavLink } from "react-router-dom";
 
-const NAV_LINKS: { to: string; label: string }[] = [
-  { to: "/", label: "Dashboard" },
-  { to: "/lessons", label: "Lessons" },
-  { to: "/exams", label: "Exams & Past Papers" },
-  { to: "/groups", label: "Study Groups & Collab" },
-  { to: "/ai-study", label: "AI Study Assistant" },
-  { to: "/settings", label: "Settings" }
+const NAV_LINKS: { to: string; label: string; icon: string }[] = [
+  { to: "/", label: "Dashboard", icon: "grid_view" },
+  { to: "/lessons", label: "Lessons", icon: "menu_book" },
+  { to: "/exams", label: "Exams & Past Papers", icon: "assignment" },
+  { to: "/groups", label: "Study Groups & Collab", icon: "groups" },
+  { to: "/ai-study", label: "AI Study Assistant", icon: "psychology" },
+  { to: "/settings", label: "Settings", icon: "settings" }
 ];
 
 export default function Sidebar() {
@@ -25,7 +25,7 @@ export default function Sidebar() {
           {NAV_LINKS.map((link) => (
             <NavLink
               className={({ isActive }) =>
-                `px-space-md py-space-sm rounded-lg font-label-lg text-label-lg transition-colors ${
+                `flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-label-lg text-label-lg transition-colors ${
                   isActive
                     ? "bg-primary-container text-on-primary shadow-sm"
                     : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
@@ -35,7 +35,8 @@ export default function Sidebar() {
               key={link.to}
               to={link.to}
             >
-              {link.label}
+              <span className="material-symbols-outlined text-[20px]">{link.icon}</span>
+              <span>{link.label}</span>
             </NavLink>
           ))}
         </nav>
