@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "../../lib/supabase";
 
 export default function Header() {
   const [profileOpen, setProfileOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -16,8 +18,14 @@ export default function Header() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    await supabase.auth.signOut();
     setProfileOpen(false);
+    setLoggingOut(false);
+    // AppLayout's guard also reacts to SIGNED_OUT via onAuthStateChange;
+    // this explicit navigation just makes the redirect immediate.
     navigate("/login");
   };
 
@@ -93,12 +101,15 @@ export default function Header() {
               </Link>
               <div className="h-px bg-surface-container my-1" />
               <button
-                className="w-full flex items-center gap-2 px-space-sm py-2 rounded-lg hover:bg-error-container text-error font-label-md text-label-md transition-colors"
+                className="w-full flex items-center gap-2 px-space-sm py-2 rounded-lg hover:bg-error-container text-error font-label-md text-label-md transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                disabled={loggingOut}
                 onClick={handleLogout}
                 type="button"
               >
-                <span className="material-symbols-outlined text-[18px]">logout</span>
-                <span>Log Out</span>
+                <span className={`material-symbols-outlined text-[18px] ${loggingOut ? "animate-spin" : ""}`}>
+                  {loggingOut ? "progress_activity" : "logout"}
+                </span>
+                <span>{loggingOut ? "Signing out..." : "Log Out"}</span>
               </button>
             </div>
           )}
