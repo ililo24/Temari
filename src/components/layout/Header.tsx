@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import type { Session } from "@supabase/supabase-js";
 import { supabase } from "../../lib/supabase";
 
 export default function Header() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
   const profileRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -18,6 +20,22 @@ export default function Header() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    // AppLayout's guard already guarantees a session before this header
+    // renders; this keeps the displayed user in sync with the auth client.
+    supabase.auth.getSession().then(({ session: currentSession }) => {
+      setSession(currentSession);
+    });
+
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange((_event, currentSession) => {
+      setSession(currentSession);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   const handleLogout = async () => {
     if (loggingOut) return;
     setLoggingOut(true);
@@ -28,6 +46,20 @@ export default function Header() {
     // this explicit navigation just makes the redirect immediate.
     navigate("/login");
   };
+
+  // Signed-in user info. Signup stores full_name in user_metadata, and the
+  // Google provider fills in full_name / avatar_url automatically.
+  const user = session?.user ?? null;
+  const metadata = (user?.user_metadata ?? {}) as { full_name?: string; avatar_url?: string };
+  const fullName = typeof metadata.full_name === "string" ? metadata.full_name.trim() : "";
+  const avatarUrl = typeof metadata.avatar_url === "string" ? metadata.avatar_url : "";
+  const email = user?.email ?? "";
+  const displayName = fullName || (email ? email.split("@")[0] : "Student");
+  const initials = displayName
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase())
+    .join("")
+    .slice(0, 2);
 
   return (
     <header className="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg">
@@ -66,14 +98,27 @@ export default function Header() {
             onClick={() => setProfileOpen((o) => !o)}
             type="button"
           >
-            <img
-              alt="Profile"
-              className="w-8 h-8 rounded-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1L8WFo-mBDL9i-zWMDD7A3FwtonEsEz2nPorHrxciq8JruCbrL61YLWAGGdHkIXcgXdNR6LQBQduxbsNKBzncu8LZVj6DbL-ztN_WG_AWmdEGvByBQmy70DvdC-fAXfDxIBLoKxsBRH17DbTIOjDnzysFjbGpK1L2AwpyXM8Mgsf93OZwAVfft6PVxgYhrFx9dsEb7MXzBtUr2o2kablt0h_4MtLSiXwv8OVO45GC9XicOXgod4ZRKA"
-            />
+            {avatarUrl ? (
+              <img
+                alt={displayName}
+                className="w-8 h-8 rounded-full object-cover"
+                src={avatarUrl}
+              />
+            ) : (
+              <div
+                aria-hidden="true"
+                className="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-label-md text-label-md select-none shrink-0"
+              >
+                {initials}
+              </div>
+            )}
             <div className="flex flex-col">
-              <span className="font-label-md text-label-md text-on-surface leading-tight">Amina K.</span>
-              <span className="font-label-sm text-label-sm text-on-surface-variant leading-tight">(Grade 11)</span>
+              <span className="font-label-md text-label-md text-on-surface leading-tight max-w-[140px] truncate">
+                {displayName}
+              </span>
+              <span className="font-label-sm text-label-sm text-on-surface-variant leading-tight max-w-[180px] truncate">
+                {email || "Student account"}
+              </span>
             </div>
             <span className="material-symbols-outlined text-[20px] text-on-surface-variant">expand_more</span>
           </button>
