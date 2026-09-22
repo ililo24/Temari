@@ -2,8 +2,8 @@
 -- StudyPulse — Initial Database Schema
 --
 -- Run manually: Supabase Dashboard → SQL Editor → paste this file → Run.
--- Safe to re-run: tables use IF NOT EXISTS and policies are dropped before
--- they are recreated.
+-- Safe to re-run: tables use IF NOT EXISTS, policies are dropped before
+-- they are recreated, and index/constraint additions are guarded.
 --
 -- Mirrors what the app displays:
 --   Dashboard — readiness %, lessons completed, mock exam average, daily
@@ -52,6 +52,15 @@ create policy "profiles_update_own"
   to authenticated
   using (auth.uid() = id)
   with check (auth.uid() = id);
+
+-- Without a DELETE policy, RLS default-denies deletes: they would succeed
+-- with 0 rows affected and no error. This lets users delete their own row.
+drop policy if exists "profiles_delete_own" on public.profiles;
+create policy "profiles_delete_own"
+  on public.profiles
+  for delete
+  to authenticated
+  using (auth.uid() = id);
 
 -- ----------------------------------------------------------------------------
 -- subjects — shared reference data (no user_id): the catalog of academic
@@ -112,6 +121,29 @@ create policy "subject_mastery_update_own"
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
 
+drop policy if exists "subject_mastery_delete_own" on public.subject_mastery;
+create policy "subject_mastery_delete_own"
+  on public.subject_mastery
+  for delete
+  to authenticated
+  using (auth.uid() = user_id);
+
+-- One mastery row per user per subject. Without this, duplicate rows are
+-- possible (e.g. React StrictMode double-invokes effects in development).
+-- Guarded DO block so this applies even if the table already exists.
+do $$
+begin
+  alter table public.subject_mastery
+    add constraint subject_mastery_user_subject_unique unique (user_id, subject_id);
+exception
+  when duplicate_object then null; -- constraint already exists (re-run)
+end $$;
+
+-- Postgres does not auto-index FK columns. The unique constraint above
+-- already covers user_id-prefix lookups; this index covers subject joins.
+create index if not exists idx_subject_mastery_subject_id
+  on public.subject_mastery (subject_id);
+
 -- ----------------------------------------------------------------------------
 -- lessons — shared reference data (no user_id): the ordered lesson catalog
 -- per subject used by the Lessons page and the revision timetable.
@@ -170,6 +202,28 @@ create policy "lesson_progress_update_own"
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
 
+drop policy if exists "lesson_progress_delete_own" on public.lesson_progress;
+create policy "lesson_progress_delete_own"
+  on public.lesson_progress
+  for delete
+  to authenticated
+  using (auth.uid() = user_id);
+
+-- One progress row per user per lesson (see subject_mastery note above
+-- regarding duplicates and StrictMode). Guarded so it is re-run safe.
+do $$
+begin
+  alter table public.lesson_progress
+    add constraint lesson_progress_user_lesson_unique unique (user_id, lesson_id);
+exception
+  when duplicate_object then null; -- constraint already exists (re-run)
+end $$;
+
+-- The unique constraint above covers user_id-prefix lookups; this index
+-- covers joins from the lessons side.
+create index if not exists idx_lesson_progress_lesson_id
+  on public.lesson_progress (lesson_id);
+
 -- ----------------------------------------------------------------------------
 -- exam_results — per-user mock/past exam attempts with score, max score,
 -- timestamp, and an optional diagnostic note; powers the Dashboard's mock
@@ -209,6 +263,17 @@ create policy "exam_results_update_own"
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
 
+drop policy if exists "exam_results_delete_own" on public.exam_results;
+create policy "exam_results_delete_own"
+  on public.exam_results
+  for delete
+  to authenticated
+  using (auth.uid() = user_id);
+
+-- Supports the Dashboard's per-user exam history, newest first.
+create index if not exists idx_exam_results_user_taken
+  on public.exam_results (user_id, taken_at);
+
 -- ----------------------------------------------------------------------------
 -- study_goals — per-user goal checklist items (the Dashboard's goal
 -- checkboxes with the "X of Y done" counter), each with a target date.
@@ -244,6 +309,17 @@ create policy "study_goals_update_own"
   to authenticated
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+
+drop policy if exists "study_goals_delete_own" on public.study_goals;
+create policy "study_goals_delete_own"
+  on public.study_goals
+  for delete
+  to authenticated
+  using (auth.uid() = user_id);
+
+-- Supports the Dashboard's per-user goal checklist queries.
+create index if not exists idx_study_goals_user_id
+  on public.study_goals (user_id);
 
 -- ----------------------------------------------------------------------------
 -- ai_recommendations — per-user AI-generated study suggestions (optionally
@@ -281,6 +357,17 @@ create policy "ai_recommendations_update_own"
   to authenticated
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+
+drop policy if exists "ai_recommendations_delete_own" on public.ai_recommendations;
+create policy "ai_recommendations_delete_own"
+  on public.ai_recommendations
+  for delete
+  to authenticated
+  using (auth.uid() = user_id);
+
+-- Supports the Dashboard's per-user recommendations feed, newest first.
+create index if not exists idx_ai_recommendations_user_created
+  on public.ai_recommendations (user_id, created_at);
 
 -- ----------------------------------------------------------------------------
 -- OPTIONAL: automatic profile-creation trigger (commented out).
