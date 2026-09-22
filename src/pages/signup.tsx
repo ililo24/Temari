@@ -89,6 +89,25 @@ export default function Signup() {
         setSubmitState("idle");
         return;
       }
+
+      // Profile creation — handled separately from the auth signUp failure
+      // above: the auth account already exists at this point, so a failed
+      // profile insert is logged as non-fatal and the flow continues.
+      if (data.user) {
+        const { error: profileError } = await supabase.from("profiles").insert({
+          id: data.user.id,
+          full_name: fullName,
+          grade_level: selectedGrade,
+          academic_term: null
+        });
+        if (profileError) {
+          console.error(
+            "Profile creation failed (auth account was created successfully):",
+            profileError.message
+          );
+        }
+      }
+
       if (data.session) {
         // Account created with an active session — go straight to the workspace
         navigate("/");
