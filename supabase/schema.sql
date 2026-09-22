@@ -369,39 +369,25 @@ create policy "ai_recommendations_delete_own"
 create index if not exists idx_ai_recommendations_user_created
   on public.ai_recommendations (user_id, created_at);
 
--- ----------------------------------------------------------------------------
--- OPTIONAL: automatic profile-creation trigger (commented out).
---
--- The signup flow inserts the profiles row from the client right after
--- supabase.auth.signUp. That client-side insert only succeeds when signUp
--- returns a session — i.e. when email confirmation is DISABLED in Supabase.
--- If email confirmation is ENABLED, signUp returns session = null and the
--- browser is still anonymous, so the RLS policies above (correctly) reject
--- the insert and it is logged as a non-fatal error.
---
--- Uncomment this block to have profiles created reliably in that case too.
--- It is safe to leave enabled alongside the client-side insert
--- (on conflict (id) do nothing prevents duplicates). Delete this block if
--- you want the client-side insert to be the only profile-creation path.
--- ----------------------------------------------------------------------------
--- create or replace function public.handle_new_user()
--- returns trigger
--- language plpgsql
--- security definer
--- set search_path = public
--- as $$
--- begin
---   insert into public.profiles (id, full_name)
---   values (
---     new.id,
---     coalesce(new.raw_user_meta_data ->> 'full_name', '')
---   )
---   on conflict (id) do nothing;
---   return new;
--- end;
--- $$;
---
--- create trigger on_auth_user_created
---   after insert on auth.users
---   for each row
---   execute function public.handle_new_user();
+
+ create or replace function public.handle_new_user()
+ returns trigger
+ language plpgsql
+ security definer
+ set search_path = public
+ as $$
+ begin
+   insert into public.profiles (id, full_name)
+   values (
+     new.id,
+     coalesce(new.raw_user_meta_data ->> 'full_name', '')
+   )
+   on conflict (id) do nothing;
+   return new;
+ end;
+ $$;
+
+ create trigger on_auth_user_created
+   after insert on auth.users
+   for each row
+   execute function public.handle_new_user();
