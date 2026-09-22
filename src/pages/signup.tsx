@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabase";
 
 const GRADES: { value: string; label: string }[] = [
   { value: "grade-9", label: "Grade 9" },
@@ -53,30 +54,56 @@ export default function Signup() {
   const [selectedStream, setSelectedStream] = useState<"stem" | "humanities">("stem");
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const [pwdStrength, setPwdStrength] = useState<StrengthState>({
     bar: "h-full w-2/3 bg-tertiary-container rounded-full transition-all duration-300",
     label: "Strong key",
     labelClass: "font-label-sm text-label-sm text-tertiary shrink-0"
   });
   const [submitState, setSubmitState] = useState<"idle" | "submitting" | "done">("idle");
-  const submitTimer = useRef<number | undefined>(undefined);
-
-  useEffect(() => {
-    return () => window.clearTimeout(submitTimer.current);
-  }, []);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [oauthError, setOauthError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handlePasswordChange = (val: string) => {
     setPassword(val);
     setPwdStrength(getStrength(val));
   };
 
-  const handleRegistration = () => {
+  const handleRegistration = async () => {
     if (submitState !== "idle") return;
+    setFormError(null);
+    setStatusMessage(null);
     setSubmitState("submitting");
-    window.clearTimeout(submitTimer.current);
-    submitTimer.current = window.setTimeout(() => {
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: { data: { full_name: fullName } }
+      });
+      if (error) {
+        console.error("Signup failed:", error.message);
+        setFormError(error.message);
+        setSubmitState("idle");
+        return;
+      }
+      if (data.session) {
+        // Account created with an active session — go straight to the workspace
+        navigate("/");
+        return;
+      }
+      // No error but no session means email confirmation is required
       setSubmitState("done");
-    }, 900);
+      setStatusMessage(
+        `Account created! We sent a confirmation link to ${email}. Check your inbox (and spam folder) to activate your account, then log in.`
+      );
+    } catch (err) {
+      console.error("Signup threw:", err);
+      setFormError(err instanceof Error ? err.message : String(err));
+      setSubmitState("idle");
+    }
   };
 
   return (
@@ -230,6 +257,22 @@ export default function Signup() {
                 <button
                   className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-lg text-label-lg transition-all active:scale-[0.99] shadow-sm"
                   id="google-auth-btn"
+                  onClick={async () => {
+                    setOauthError(null);
+                    try {
+                      const { error } = await supabase.auth.signInWithOAuth({
+                        provider: "google",
+                        options: { redirectTo: window.location.origin }
+                      });
+                      if (error) {
+                        console.error("Google sign-in error:", error);
+                        setOauthError(error.message);
+                      }
+                    } catch (err) {
+                      console.error("Google sign-in error:", err);
+                      setOauthError(err instanceof Error ? err.message : String(err));
+                    }
+                  }}
                   type="button"
                 >
                   <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
@@ -252,6 +295,15 @@ export default function Signup() {
                   </svg>
                   <span>Continue with Google Workspace / School Account</span>
                 </button>
+                {oauthError && (
+                  <div
+                    className="p-3 rounded-lg bg-error/10 text-error font-body-sm text-body-sm text-center"
+                    id="oauth-error"
+                    role="alert"
+                  >
+                    <span className="font-label-sm font-bold">Google sign-in failed:</span> {oauthError}
+                  </div>
+                )}
                 {/* Divider */}
                 <div className="relative flex items-center justify-center my-space-xs">
                   <div className="w-full bg-surface-container-high h-[1px]" />
@@ -278,9 +330,11 @@ export default function Signup() {
                         <input
                           className="w-full h-11 px-3.5 rounded-lg bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none focus:bg-surface-container-low shadow-sm"
                           id="full-name"
+                          onChange={(e) => setFullName(e.target.value)}
                           placeholder="e.g. Amina Khan"
                           required
                           type="text"
+                          value={fullName}
                         />
                       </div>
                     </div>
@@ -296,9 +350,11 @@ export default function Signup() {
                         <input
                           className="w-full h-11 px-3.5 rounded-lg bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none focus:bg-surface-container-low shadow-sm"
                           id="academic-email"
+                          onChange={(e) => setEmail(e.target.value)}
                           placeholder="amina.k@westviewprep.edu"
                           required
                           type="email"
+                          value={email}
                         />
                       </div>
                     </div>
@@ -438,12 +494,12 @@ export default function Signup() {
                     {submitState === "submitting" ? (
                       <>
                         <span className="material-symbols-outlined text-lg animate-spin">progress_activity</span>
-                        <span>Generating diagnostic environment...</span>
+                        <span>Creating your account...</span>
                       </>
                     ) : submitState === "done" ? (
                       <>
                         <span className="material-symbols-outlined text-lg">check_circle</span>
-                        <span>Sprint Ready</span>
+                        <span>Account Created</span>
                       </>
                     ) : (
                       <>
@@ -454,18 +510,24 @@ export default function Signup() {
                       </>
                     )}
                   </button>
+                  {formError && (
+                    <div
+                      className="p-3 rounded-lg bg-error/10 text-error font-body-sm text-body-sm text-center"
+                      id="form-error"
+                      role="alert"
+                    >
+                      <span className="font-label-sm font-bold">Sign-up failed:</span> {formError}
+                    </div>
+                  )}
                   {/* Feedback Status Region for Async UX */}
                   <div
                     className={`p-3 rounded-lg font-body-sm text-body-sm text-center ${
-                      submitState === "done" ? "bg-tertiary-container/15 text-tertiary" : "hidden"
+                      statusMessage ? "bg-tertiary-container/15 text-tertiary" : "hidden"
                     }`}
                     id="status-message"
+                    role="status"
                   >
-                    {submitState === "done" && (
-                      <>
-                        <strong>Welcome aboard!</strong> Initializing your Grade 11 diagnostic sprint...
-                      </>
-                    )}
+                    {statusMessage}
                   </div>
                   {/* Login Deep Link */}
                   <div className="text-center pt-2">

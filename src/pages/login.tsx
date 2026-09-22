@@ -1,8 +1,38 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabase";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [oauthError, setOauthError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const handleSignIn = async () => {
+    setFormError(null);
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+      if (error) {
+        console.error("Sign-in failed:", error.message);
+        setFormError(error.message);
+        setSubmitting(false);
+        return;
+      }
+      setSubmitting(false);
+      navigate("/");
+    } catch (err) {
+      console.error("Sign-in threw:", err);
+      setFormError(err instanceof Error ? err.message : String(err));
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="bg-surface font-body-md text-body-md text-on-surface antialiased">
@@ -122,6 +152,23 @@ export default function Login() {
                   <div className="space-y-space-sm">
                     <button
                       className="w-full h-11 px-space-md bg-surface-container-low hover:bg-surface-container transition-colors rounded-lg flex items-center justify-between group shadow-sm text-left"
+                      id="google-auth-btn"
+                      onClick={async () => {
+                        setOauthError(null);
+                        try {
+                          const { error } = await supabase.auth.signInWithOAuth({
+                            provider: "google",
+                            options: { redirectTo: window.location.origin }
+                          });
+                          if (error) {
+                            console.error("Google sign-in error:", error);
+                            setOauthError(error.message);
+                          }
+                        } catch (err) {
+                          console.error("Google sign-in error:", err);
+                          setOauthError(err instanceof Error ? err.message : String(err));
+                        }
+                      }}
                       type="button"
                     >
                       <div className="flex items-center gap-space-sm">
@@ -152,6 +199,15 @@ export default function Login() {
                         Verified SSO
                       </span>
                     </button>
+                    {oauthError && (
+                      <div
+                        className="p-3 rounded-lg bg-error/10 text-error font-body-sm text-body-sm text-left"
+                        id="oauth-error"
+                        role="alert"
+                      >
+                        <span className="font-label-sm font-bold">Google sign-in failed:</span> {oauthError}
+                      </div>
+                    )}
                     <button
                       className="w-full h-10 px-space-md bg-surface-container-lowest hover:bg-surface-container-low transition-colors rounded-lg flex items-center justify-center gap-space-xs text-on-surface-variant hover:text-on-surface"
                       type="button"
@@ -170,7 +226,13 @@ export default function Login() {
                     </span>
                   </div>
                   {/* Direct Sign-In Form */}
-                  <form className="space-y-space-md" onSubmit={(e) => e.preventDefault()}>
+                  <form
+                    className="space-y-space-md"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleSignIn();
+                    }}
+                  >
                     {/* Email Input */}
                     <div className="space-y-space-xs">
                       <label className="block font-label-md text-on-surface" htmlFor="email">
@@ -183,9 +245,11 @@ export default function Login() {
                         <input
                           className="w-full h-11 pl-11 pr-space-md bg-surface-container-lowest text-on-surface placeholder:text-outline/70 font-body-md rounded-lg shadow-sm focus:bg-surface-container-low transition-all outline-none"
                           id="email"
+                          onChange={(e) => setEmail(e.target.value)}
                           placeholder="e.g. amina.k@westviewprep.edu"
                           required
                           type="email"
+                          value={email}
                         />
                       </div>
                     </div>
@@ -209,9 +273,11 @@ export default function Login() {
                         <input
                           className="w-full h-11 pl-11 pr-11 bg-surface-container-lowest text-on-surface placeholder:text-outline/70 font-body-md rounded-lg shadow-sm focus:bg-surface-container-low transition-all outline-none tracking-widest"
                           id="password"
+                          onChange={(e) => setPassword(e.target.value)}
                           placeholder="••••••••••••"
                           required
                           type={showPassword ? "text" : "password"}
+                          value={password}
                         />
                         <button
                           aria-label="Toggle password visibility"
@@ -245,12 +311,31 @@ export default function Login() {
                     </div>
                     {/* Submit Button */}
                     <button
-                      className="w-full h-11 bg-primary hover:bg-primary-container text-on-primary font-label-lg rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-space-xs active:scale-[0.99]"
+                      className="w-full h-11 bg-primary hover:bg-primary-container text-on-primary font-label-lg rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-space-xs active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed"
+                      disabled={submitting}
                       type="submit"
                     >
-                      <span>Sign In to Workspace</span>
-                      <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                      {submitting ? (
+                        <>
+                          <span className="material-symbols-outlined text-[18px] animate-spin">progress_activity</span>
+                          <span>Signing in...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Sign In to Workspace</span>
+                          <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                        </>
+                      )}
                     </button>
+                    {formError && (
+                      <div
+                        className="p-3 rounded-lg bg-error/10 text-error font-body-sm text-body-sm text-left"
+                        id="form-error"
+                        role="alert"
+                      >
+                        <span className="font-label-sm font-bold">Sign-in failed:</span> {formError}
+                      </div>
+                    )}
                   </form>
                   {/* New User Registration Link */}
                   <div className="mt-space-md pt-space-md text-center bg-surface-container-low -mx-space-md sm:-mx-space-lg -mb-space-md sm:-mb-space-lg p-space-md rounded-b-xl">
