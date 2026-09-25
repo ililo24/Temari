@@ -1,7 +1,145 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { supabase } from "../lib/supabase";
+
+// Partial row shapes returned by the queries below. Same convention as
+// lessons.tsx: local interfaces for partial selects.
+interface ProfileSummary {
+  full_name: string | null;
+  streak_days: number | null;
+}
+
+interface LessonRef {
+  id: string;
+  subject_id: string;
+}
+
+// lesson_progress joined through lessons -> subjects so per-subject rollups
+// (name, category) come back in a single request.
+interface ProgressRow {
+  lesson_id: string;
+  progress_pct: number | null;
+  lessons: {
+    subject_id: string | null;
+    subjects: { id: string; name: string | null; category: string | null } | null;
+  } | null;
+}
+
+interface SubjectStat {
+  subjectId: string;
+  name: string;
+  category: string | null;
+  averagePct: number;
+  startedCount: number;
+  completedCount: number;
+  totalLessons: number;
+}
+
+// Subjects at or above this average lesson progress are listed under
+// "Mastered Strengths"; everything below goes to "Growth Areas".
+const MASTERY_STRENGTH_THRESHOLD = 80;
+// Growth-area rows below this average get the error ("critical") styling.
+const GROWTH_CRITICAL_THRESHOLD = 60;
+
+function LoadingIndicator({ label }: { label: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-space-sm py-space-xl rounded-xl bg-surface-container-low">
+      <span className="material-symbols-outlined text-[32px] text-primary animate-spin">progress_activity</span>
+      <span className="font-label-md text-label-md text-on-surface-variant">{label}</span>
+    </div>
+  );
+}
+
+// Empty-state pattern matching lessons.tsx (icon + title + message card),
+// adapted to sit inside an already-white section card, with an optional
+// call-to-action.
+function EmptyState({ icon, title, message, action }: { icon: string; title: string; message: string; action?: ReactNode }) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-space-sm py-space-xl px-space-lg rounded-xl bg-surface-container-low text-center">
+      <span className="material-symbols-outlined text-[40px] text-on-surface-variant">{icon}</span>
+      <h3 className="font-headline-sm text-headline-sm text-on-surface">{title}</h3>
+      <p className="font-body-md text-body-md text-on-surface-variant max-w-md">{message}</p>
+      {action}
+    </div>
+  );
+}
+
+function subjectDetailLabel(stat: SubjectStat) {
+  const completed =
+    stat.totalLessons > 0
+      ? `${stat.completedCount} of ${stat.totalLessons} lessons completed`
+      : `${stat.completedCount} lessons completed`;
+  return stat.category ? `${stat.category} • ${completed}` : completed;
+}
 
 export default function Dashboard() {
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<ProfileSummary | null>(null);
+  const [allLessons, setAllLessons] = useState<LessonRef[]>([]);
+  const [progressRows, setProgressRows] = useState<ProgressRow[]>([]);
+
+  // Load the signed-in user's real dashboard data once on mount: their
+  // profile row (streak + display name), the full lesson catalog (totals),
+  // and their lesson_progress rows (completed count, readiness heuristic,
+  // and the per-subject mastery proxy). exam_results and subject_mastery
+  // are intentionally NOT queried — both are empty and have no writers yet.
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadDashboardData() {
+      const {
+        data: { user },
+        error: authError
+      } = await supabase.auth.getUser();
+      if (cancelled) return;
+      if (authError || !user) {
+        // AppLayout's guard should ensure a session; treat a missing user
+        // as "no data" rather than crashing the page.
+        console.warn("Dashboard could not resolve the current user:", authError?.message ?? "no session");
+        setLoading(false);
+        return;
+      }
+
+      const [profileResult, lessonsResult, progressResult] = await Promise.all([
+        supabase.from("profiles").select("full_name, streak_days").eq("id", user.id).maybeSingle(),
+        supabase.from("lessons").select("id, subject_id"),
+        supabase
+          .from("lesson_progress")
+          .select("lesson_id, progress_pct, lessons(subject_id, subjects(id, name, category))")
+          .eq("user_id", user.id)
+      ]);
+      if (cancelled) return;
+
+      if (profileResult.error) {
+        console.warn("Failed to load profile:", profileResult.error.message);
+      } else {
+        setProfile((profileResult.data ?? null) as ProfileSummary | null);
+      }
+
+      if (lessonsResult.error) {
+        console.warn("Failed to load lessons:", lessonsResult.error.message);
+        setAllLessons([]);
+      } else {
+        setAllLessons((lessonsResult.data ?? []) as LessonRef[]);
+      }
+
+      if (progressResult.error) {
+        console.warn("Failed to load lesson progress:", progressResult.error.message);
+        setProgressRows([]);
+      } else {
+        setProgressRows((progressResult.data ?? []) as ProgressRow[]);
+      }
+
+      setLoading(false);
+    }
+
+    loadDashboardData();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Study Goals checklist counter (existing DOM-based pattern, unchanged).
   useEffect(() => {
     const checkboxes = Array.from(document.querySelectorAll<HTMLInputElement>(".goal-checkbox"));
     const goalCount = document.getElementById("goalCount");
@@ -32,39 +170,89 @@ export default function Dashboard() {
       cb.addEventListener("change", updateGoalCount);
     });
 
-    const toggleList = document.getElementById("viewToggleCompetency") as HTMLButtonElement | null;
-    const toggleBenchmark = document.getElementById("viewToggleBenchmark") as HTMLButtonElement | null;
-
-    const handleListClick = () => {
-      if (!toggleList || !toggleBenchmark) return;
-
-      toggleList.className =
-        "px-space-md py-1 rounded bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-xs transition-all";
-      toggleBenchmark.className =
-        "px-space-md py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-all";
-    };
-
-    const handleBenchmarkClick = () => {
-      if (!toggleList || !toggleBenchmark) return;
-
-      toggleBenchmark.className =
-        "px-space-md py-1 rounded bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-xs transition-all";
-      toggleList.className =
-        "px-space-md py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-all";
-    };
-
-    toggleList?.addEventListener("click", handleListClick);
-    toggleBenchmark?.addEventListener("click", handleBenchmarkClick);
-
     return () => {
       checkboxes.forEach((cb) => {
         cb.removeEventListener("change", updateGoalCount);
       });
-
-      toggleList?.removeEventListener("click", handleListClick);
-      toggleBenchmark?.removeEventListener("click", handleBenchmarkClick);
     };
   }, []);
+
+  const totalLessons = allLessons.length;
+
+  const completedLessonCount = useMemo(
+    () =>
+      (progressRows ?? []).filter((row) => row.progress_pct != null && Number(row.progress_pct) >= 100).length,
+    [progressRows]
+  );
+
+  const lessonsCompletedPct = totalLessons > 0 ? Math.round((completedLessonCount / totalLessons) * 100) : 0;
+
+  // TEMPORARY HEURISTIC — NOT A VALIDATED READINESS METRIC.
+  // Readiness is derived purely from lesson_progress: the average progress
+  // across ALL lessons in the catalog, where a lesson with no progress row
+  // counts as 0%. Replace with a real calculation once exam_results and
+  // subject_mastery hold actual data.
+  const readinessPct = useMemo(() => {
+    if (totalLessons === 0) return 0;
+    const sum = (progressRows ?? []).reduce(
+      (total, row) => total + (row.progress_pct != null ? Number(row.progress_pct) : 0),
+      0
+    );
+    return Math.round(sum / totalLessons);
+  }, [progressRows, totalLessons]);
+
+  // Lightweight per-subject mastery proxy: average lesson_progress.progress_pct
+  // for lessons belonging to each subject the user has actually started.
+  // Subjects with zero progress rows are excluded entirely (no 0% noise).
+  const subjectStats = useMemo<SubjectStat[]>(() => {
+    const totalsBySubject = new Map<string, number>();
+    for (const lesson of allLessons) {
+      totalsBySubject.set(lesson.subject_id, (totalsBySubject.get(lesson.subject_id) ?? 0) + 1);
+    }
+
+    const rollups = new Map<
+      string,
+      { name: string; category: string | null; sum: number; started: number; completed: number }
+    >();
+    for (const row of progressRows ?? []) {
+      const subjectId = row.lessons?.subject_id;
+      if (!subjectId) continue;
+      const rollup =
+        rollups.get(subjectId) ?? {
+          name: row.lessons?.subjects?.name ?? "Untitled subject",
+          category: row.lessons?.subjects?.category ?? null,
+          sum: 0,
+          started: 0,
+          completed: 0
+        };
+      const pct = row.progress_pct != null ? Number(row.progress_pct) : 0;
+      rollup.sum += pct;
+      rollup.started += 1;
+      if (pct >= 100) rollup.completed += 1;
+      rollups.set(subjectId, rollup);
+    }
+
+    return Array.from(rollups.entries())
+      .map(([subjectId, rollup]) => ({
+        subjectId,
+        name: rollup.name,
+        category: rollup.category,
+        averagePct: Math.round(rollup.sum / rollup.started),
+        startedCount: rollup.started,
+        completedCount: rollup.completed,
+        totalLessons: totalsBySubject.get(subjectId) ?? 0
+      }))
+      .sort((a, b) => b.averagePct - a.averagePct);
+  }, [progressRows, allLessons]);
+
+  const strengths = subjectStats.filter((s) => s.averagePct >= MASTERY_STRENGTH_THRESHOLD);
+  const growthAreas = subjectStats.filter((s) => s.averagePct < MASTERY_STRENGTH_THRESHOLD);
+  const strengthsAverage =
+    strengths.length > 0
+      ? Math.round(strengths.reduce((total, s) => total + s.averagePct, 0) / strengths.length)
+      : 0;
+
+  const displayName = profile?.full_name?.trim() ?? "";
 
   return (
     <div className="flex flex-col w-full">
@@ -78,13 +266,23 @@ export default function Dashboard() {
 
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg">
             <div className="space-y-space-xs max-w-2xl">
-              <div className="inline-flex items-center gap-space-xs px-space-md py-1 rounded-full bg-white/15 backdrop-blur-md text-on-primary font-label-md text-label-md uppercase tracking-wider">
-                <span className="w-2 h-2 rounded-full bg-tertiary-fixed animate-pulse" />
-                Term 2 Examination Sprint • Week 7
+              <div className="flex flex-wrap items-center gap-space-xs">
+                <div className="inline-flex items-center gap-space-xs px-space-md py-1 rounded-full bg-white/15 backdrop-blur-md text-on-primary font-label-md text-label-md uppercase tracking-wider">
+                  <span className="w-2 h-2 rounded-full bg-tertiary-fixed animate-pulse" />
+                  Term 2 Examination Sprint • Week 7
+                </div>
+                {/* Real streak from profiles.streak_days (hidden until the
+                    profile row loads — never a fabricated number). */}
+                {profile && (
+                  <div className="inline-flex items-center gap-space-xs px-space-md py-1 rounded-full bg-white/15 backdrop-blur-md text-on-primary font-label-md text-label-md">
+                    <span className="text-base leading-none">🔥</span>
+                    <span>{profile.streak_days ?? 0}-day streak</span>
+                  </div>
+                )}
               </div>
 
               <h1 className="font-headline-xl text-headline-xl tracking-tight text-on-primary">
-                Welcome back, Amina! 🚀
+                Welcome back{displayName ? `, ${displayName}` : ""}! 🚀
               </h1>
 
               <p className="font-body-lg text-body-lg text-on-primary-container leading-relaxed">
@@ -109,46 +307,76 @@ export default function Dashboard() {
 
           {/* Live Metric Tiles Bento Overlap */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-space-md mt-space-xl pt-space-md border-t border-white/15">
+            {/* Readiness — temporary heuristic derived from lesson_progress
+                (see readinessPct above), not a validated readiness metric. */}
             <div className="flex flex-col gap-space-xs">
               <span className="font-label-sm text-label-sm text-on-primary-container uppercase tracking-wider flex items-center gap-1">
                 <span className="material-symbols-outlined text-[16px]">verified</span> Readiness
               </span>
               <div className="flex items-baseline gap-space-xs">
-                <span className="font-headline-lg text-headline-lg font-bold text-white tracking-tight">84%</span>
-                <span className="font-label-sm text-label-sm text-tertiary-fixed flex items-center">
-                  <span className="material-symbols-outlined text-[14px]">arrow_upward</span>+6%
-                </span>
+                {loading ? (
+                  <span className="material-symbols-outlined text-[28px] animate-spin text-white">progress_activity</span>
+                ) : (
+                  <span className="font-headline-lg text-headline-lg font-bold text-white tracking-tight">
+                    {readinessPct}%
+                  </span>
+                )}
               </div>
-              <span className="font-body-sm text-body-sm text-on-primary-container/80">Term benchmark: 78%</span>
+              <span className="font-body-sm text-body-sm text-on-primary-container/80">
+                {loading ? "Loading your progress..." : "Based on your lesson progress so far"}
+              </span>
             </div>
 
+            {/* Lessons Completed — real counts from lesson_progress + the
+                lesson catalog. */}
             <div className="flex flex-col gap-space-xs">
               <span className="font-label-sm text-label-sm text-on-primary-container uppercase tracking-wider flex items-center gap-1">
                 <span className="material-symbols-outlined text-[16px]">task_alt</span> Lessons Completed
               </span>
               <div className="flex items-baseline gap-space-xs">
-                <span className="font-headline-lg text-headline-lg font-bold text-white tracking-tight">
-                  48
-                  <span className="text-on-primary-container/60 font-normal text-headline-sm">/64</span>
-                </span>
-                <span className="font-label-sm text-label-sm text-white/90 bg-white/20 px-1.5 py-0.5 rounded">
-                  75%
-                </span>
+                {loading ? (
+                  <span className="material-symbols-outlined text-[28px] animate-spin text-white">progress_activity</span>
+                ) : (
+                  <span className="font-headline-lg text-headline-lg font-bold text-white tracking-tight">
+                    {completedLessonCount}
+                    <span className="text-on-primary-container/60 font-normal text-headline-sm">/{totalLessons}</span>
+                  </span>
+                )}
+                {!loading && (
+                  <span className="font-label-sm text-label-sm text-white/90 bg-white/20 px-1.5 py-0.5 rounded">
+                    {lessonsCompletedPct}%
+                  </span>
+                )}
               </div>
-              <span className="font-body-sm text-body-sm text-on-primary-container/80">16 modules remaining</span>
+              <span className="font-body-sm text-body-sm text-on-primary-container/80">
+                {loading
+                  ? "Loading your progress..."
+                  : totalLessons === 0
+                    ? "No lessons in your curriculum yet"
+                    : totalLessons - completedLessonCount === 0
+                      ? "All modules complete — nice work!"
+                      : `${totalLessons - completedLessonCount} modules remaining`}
+              </span>
             </div>
 
+            {/* Mock Exam Avg — exam_results has no data yet (the Exams &
+                Past Papers flow isn't built), so this intentionally shows an
+                honest empty state instead of querying an empty table or
+                displaying a fabricated average. */}
             <div className="flex flex-col gap-space-xs">
               <span className="font-label-sm text-label-sm text-on-primary-container uppercase tracking-wider flex items-center gap-1">
                 <span className="material-symbols-outlined text-[16px]">query_stats</span> Mock Exam Avg
               </span>
               <div className="flex items-baseline gap-space-xs">
-                <span className="font-headline-lg text-headline-lg font-bold text-white tracking-tight">88.5%</span>
-                <span className="font-label-sm text-label-sm text-tertiary-fixed flex items-center">Top 5%</span>
+                <span className="font-headline-lg text-headline-lg font-bold text-white/60 tracking-tight">—</span>
               </div>
-              <span className="font-body-sm text-body-sm text-on-primary-container/80">Last paper: 92%</span>
+              <span className="font-body-sm text-body-sm text-on-primary-container/80">
+                Take your first exam to see this
+              </span>
             </div>
 
+            {/* Daily Focus — no time-tracking data source yet; intentionally
+                left as the existing placeholder (separate future task). */}
             <div className="flex flex-col gap-space-xs">
               <span className="font-label-sm text-label-sm text-on-primary-container uppercase tracking-wider flex items-center gap-1">
                 <span className="material-symbols-outlined text-[16px]">hourglass_top</span> Daily Focus
@@ -169,278 +397,189 @@ export default function Dashboard() {
           <div className="xl:col-span-8 flex flex-col gap-space-xl">
             {/* Diagnostic Breakdown: Strengths vs Growth Areas */}
             <section className="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm space-y-space-lg">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pb-space-sm border-b border-surface-container">
-                <div>
-                  <div className="flex items-center gap-space-xs">
-                    <span className="font-label-sm text-label-sm uppercase tracking-widest text-primary font-bold">
-                      Diagnostic Intelligence
-                    </span>
-                    <span className="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
-                      AI Updated Today
-                    </span>
-                  </div>
-                  <h2 className="font-headline-md text-headline-md text-on-surface">
-                    Subject Strengths & Targeted Growth
-                  </h2>
+              <div className="pb-space-sm border-b border-surface-container">
+                <div className="flex items-center gap-space-xs">
+                  <span className="font-label-sm text-label-sm uppercase tracking-widest text-primary font-bold">
+                    Diagnostic Intelligence
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+                    Based on lesson progress
+                  </span>
                 </div>
-
-                <div className="flex items-center gap-space-xs bg-surface-container-low p-1 rounded-lg">
-                  <button
-                    className="px-space-md py-1 rounded bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-xs transition-all"
-                    id="viewToggleCompetency"
-                  >
-                    List View
-                  </button>
-                  <button
-                    className="px-space-md py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-all"
-                    id="viewToggleBenchmark"
-                  >
-                    Benchmark Comparison
-                  </button>
-                </div>
+                <h2 className="font-headline-md text-headline-md text-on-surface">
+                  Subject Strengths & Targeted Growth
+                </h2>
               </div>
 
-              {/* Mastered Strengths */}
-              <div className="space-y-space-sm">
-                <div className="flex items-center justify-between">
-                  <span className="font-label-md text-label-md text-tertiary flex items-center gap-space-xs">
-                    <span className="material-symbols-outlined text-[18px] text-tertiary-container">check_circle</span>
-                    Mastered Strengths (High Retention)
-                  </span>
-                  <span className="font-label-sm text-label-sm text-on-surface-variant">Avg: 91.3% Mastery</span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md">
-                  {/* Strength Card 1 */}
-                  <div className="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between gap-space-sm hover:shadow-md transition-shadow">
-                    <div>
-                      <div className="flex items-center justify-between mb-space-xs">
-                        <span className="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-semibold">
-                          94% Mastery
+              {loading ? (
+                <LoadingIndicator label="Loading your subject progress..." />
+              ) : subjectStats.length === 0 ? (
+                <EmptyState
+                  action={
+                    <Link
+                      className="inline-flex items-center gap-space-xs px-space-md py-2 rounded-xl bg-primary text-on-primary font-label-md text-label-md transition-opacity hover:opacity-90"
+                      to="/lessons"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">menu_book</span>
+                      <span>Browse lessons</span>
+                    </Link>
+                  }
+                  icon="school"
+                  message="Start a lesson to build your subject mastery. Your strengths and growth areas will appear here as you make progress."
+                  title="No subject activity yet"
+                />
+              ) : (
+                <>
+                  {/* Mastered Strengths */}
+                  <div className="space-y-space-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="font-label-md text-label-md text-tertiary flex items-center gap-space-xs">
+                        <span className="material-symbols-outlined text-[18px] text-tertiary-container">check_circle</span>
+                        Mastered Strengths ({MASTERY_STRENGTH_THRESHOLD}%+ Average)
+                      </span>
+                      {strengths.length > 0 && (
+                        <span className="font-label-sm text-label-sm text-on-surface-variant">
+                          Avg: {strengthsAverage}% Mastery
                         </span>
-                        <span className="material-symbols-outlined text-tertiary-container text-[20px]">science</span>
-                      </div>
-                      <h3 className="font-headline-sm text-headline-sm text-on-surface leading-snug">
-                        Genetics & Molecular Bio
-                      </h3>
-                      <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                        DNA Replication, PCR, Mendelian genetics
+                      )}
+                    </div>
+                    {strengths.length === 0 ? (
+                      <p className="font-body-sm text-body-sm text-on-surface-variant">
+                        No subjects averaging {MASTERY_STRENGTH_THRESHOLD}%+ yet — your strongest subjects will
+                        appear here as you complete lessons.
                       </p>
-                    </div>
-                    <div className="pt-space-xs border-t border-surface-container flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
-                      <span>120 questions solved</span>
-                      <span className="text-tertiary font-bold">Exam Ready</span>
-                    </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+                        {strengths.map((stat) => (
+                          <div
+                            className="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between gap-space-sm hover:shadow-md transition-shadow"
+                            key={stat.subjectId}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between mb-space-xs">
+                                <span className="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-semibold">
+                                  {stat.averagePct}% Mastery
+                                </span>
+                                <span className="material-symbols-outlined text-tertiary-container text-[20px]">school</span>
+                              </div>
+                              <h3 className="font-headline-sm text-headline-sm text-on-surface leading-snug">
+                                {stat.name}
+                              </h3>
+                              <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                                {subjectDetailLabel(stat)}
+                              </p>
+                            </div>
+                            <div className="pt-space-xs border-t border-surface-container flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+                              <span>{stat.startedCount} lessons started</span>
+                              <span className="text-tertiary font-bold">Strong subject</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
-                  {/* Strength Card 2 */}
-                  <div className="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between gap-space-sm hover:shadow-md transition-shadow">
-                    <div>
-                      <div className="flex items-center justify-between mb-space-xs">
-                        <span className="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-semibold">
-                          91% Mastery
-                        </span>
-                        <span className="material-symbols-outlined text-tertiary-container text-[20px]">functions</span>
-                      </div>
-                      <h3 className="font-headline-sm text-headline-sm text-on-surface leading-snug">
-                        Calculus: Derivatives
-                      </h3>
-                      <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                        Rates of change, optimization, chain rule
+                  {/* Growth Areas & Critical Weaknesses */}
+                  <div className="space-y-space-sm pt-space-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="font-label-md text-label-md text-error flex items-center gap-space-xs">
+                        <span className="material-symbols-outlined text-[18px]">priority_high</span>
+                        Growth Areas (Below {MASTERY_STRENGTH_THRESHOLD}% Average)
+                      </span>
+                      <span className="font-label-sm text-label-sm text-on-surface-variant">
+                        {growthAreas.length} active subject{growthAreas.length === 1 ? "" : "s"}
+                      </span>
+                    </div>
+                    {growthAreas.length === 0 ? (
+                      <p className="font-body-sm text-body-sm text-on-surface-variant">
+                        Every subject you've started is averaging {MASTERY_STRENGTH_THRESHOLD}% or higher — nice
+                        work.
                       </p>
-                    </div>
-                    <div className="pt-space-xs border-t border-surface-container flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
-                      <span>85 questions solved</span>
-                      <span className="text-tertiary font-bold">Exam Ready</span>
-                    </div>
+                    ) : (
+                      <div className="space-y-space-xs">
+                        {growthAreas.map((stat) => {
+                          const critical = stat.averagePct < GROWTH_CRITICAL_THRESHOLD;
+                          return (
+                            <div
+                              className={`p-space-md rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-space-md transition-colors ${
+                                critical
+                                  ? "bg-error-container/20 hover:bg-error-container/30"
+                                  : "bg-secondary-container/30 hover:bg-secondary-container/50"
+                              }`}
+                              key={stat.subjectId}
+                            >
+                              <div className="flex items-start gap-space-md">
+                                <div
+                                  className={`p-2.5 rounded-lg flex items-center justify-center shrink-0 ${
+                                    critical ? "bg-error text-on-error" : "bg-secondary text-on-secondary"
+                                  }`}
+                                >
+                                  <span className="material-symbols-outlined text-[22px]">school</span>
+                                </div>
+                                <div className="space-y-0.5">
+                                  <div className="flex items-center gap-space-xs">
+                                    <h4 className="font-headline-sm text-headline-sm text-on-surface">{stat.name}</h4>
+                                    <span
+                                      className={`font-label-sm text-label-sm px-2 py-0.5 rounded-full font-semibold ${
+                                        critical ? "bg-error text-on-error" : "bg-secondary text-on-secondary"
+                                      }`}
+                                    >
+                                      {stat.averagePct}% Mastery
+                                    </span>
+                                  </div>
+                                  <p className="font-body-sm text-body-sm text-on-surface-variant">
+                                    {subjectDetailLabel(stat)}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-space-sm shrink-0">
+                                <Link
+                                  className="px-space-md py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-all flex items-center gap-1 shadow-sm"
+                                  to="/lessons"
+                                >
+                                  <span>Practice Now</span>
+                                  <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                                </Link>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
 
-                  {/* Strength Card 3 */}
-                  <div className="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between gap-space-sm hover:shadow-md transition-shadow">
-                    <div>
-                      <div className="flex items-center justify-between mb-space-xs">
-                        <span className="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-semibold">
-                          89% Mastery
-                        </span>
-                        <span className="material-symbols-outlined text-tertiary-container text-[20px]">public</span>
-                      </div>
-                      <h3 className="font-headline-sm text-headline-sm text-on-surface leading-snug">
-                        Post-WWII Geopolitics
-                      </h3>
-                      <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                        Cold War balance, decolonization treaties
-                      </p>
+                  {/* Per-subject progress overview — real averages derived
+                      from lesson_progress. The mock "school median"
+                      benchmark bars had no data source, so they are dropped
+                      until cohort data exists. */}
+                  <div className="p-space-md rounded-xl bg-surface-container-low space-y-space-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="font-label-md text-label-md text-on-surface font-semibold">
+                        Your Average Lesson Progress by Subject
+                      </span>
+                      <span className="font-label-sm text-label-sm text-on-surface-variant">
+                        Cohort benchmarks coming soon
+                      </span>
                     </div>
-                    <div className="pt-space-xs border-t border-surface-container flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
-                      <span>64 essay outlines</span>
-                      <span className="text-tertiary font-bold">Exam Ready</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Growth Areas & Critical Weaknesses */}
-              <div className="space-y-space-sm pt-space-xs">
-                <div className="flex items-center justify-between">
-                  <span className="font-label-md text-label-md text-error flex items-center gap-space-xs">
-                    <span className="material-symbols-outlined text-[18px]">priority_high</span>
-                    Growth Areas & Critical Weaknesses (Requires Intervention)
-                  </span>
-                  <span className="font-label-sm text-label-sm text-error font-medium">
-                    Estimated +8.4% total score gain available
-                  </span>
-                </div>
-
-                <div className="space-y-space-xs">
-                  {/* Weakness Item 1 */}
-                  <div className="p-space-md rounded-xl bg-error-container/20 flex flex-col md:flex-row md:items-center justify-between gap-space-md hover:bg-error-container/30 transition-colors">
-                    <div className="flex items-start gap-space-md">
-                      <div className="p-2.5 rounded-lg bg-error text-on-error flex items-center justify-center shrink-0">
-                        <span className="material-symbols-outlined text-[22px]">biotech</span>
-                      </div>
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-space-xs">
-                          <h4 className="font-headline-sm text-headline-sm text-on-surface">
-                            Organic Chemistry: Reaction Mechanisms
-                          </h4>
-                          <span className="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-error text-on-error font-semibold">
-                            62% Mastery
-                          </span>
+                    <div className="space-y-space-sm pt-space-xs">
+                      {subjectStats.map((stat) => (
+                        <div key={stat.subjectId}>
+                          <div className="flex justify-between font-label-sm text-label-sm mb-1 text-on-surface-variant">
+                            <span className="font-semibold text-on-surface">{stat.name}</span>
+                            <span>{stat.averagePct}% average</span>
+                          </div>
+                          <div className="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-primary rounded-full transition-all duration-500"
+                              style={{ width: `${stat.averagePct}%` }}
+                            />
+                          </div>
                         </div>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant">
-                          <span className="font-semibold text-error">18 mistakes logged</span> in past papers
-                          (Electrophilic Addition & Markovnikov's Rule)
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-space-sm shrink-0">
-                      <button className="px-space-md py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-all flex items-center gap-1 shadow-sm">
-                        <span>Practice Now</span>
-                        <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-                      </button>
+                      ))}
                     </div>
                   </div>
-
-                  {/* Weakness Item 2 */}
-                  <div className="p-space-md rounded-xl bg-secondary-container/40 flex flex-col md:flex-row md:items-center justify-between gap-space-md hover:bg-secondary-container/60 transition-colors">
-                    <div className="flex items-start gap-space-md">
-                      <div className="p-2.5 rounded-lg bg-secondary text-on-secondary flex items-center justify-center shrink-0">
-                        <span className="material-symbols-outlined text-[22px]">trending_up</span>
-                      </div>
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-space-xs">
-                          <h4 className="font-headline-sm text-headline-sm text-on-surface">
-                            Microeconomics: Elasticity & Market Equilibrium
-                          </h4>
-                          <span className="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-secondary text-on-secondary font-semibold">
-                            67% Mastery
-                          </span>
-                        </div>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant">
-                          Struggling with multi-variable graph interpretation and tax incidence deadweight loss
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-space-sm shrink-0">
-                      <button className="px-space-md py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-all flex items-center gap-1 shadow-sm">
-                        <span>Practice Now</span>
-                        <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Weakness Item 3 */}
-                  <div className="p-space-md rounded-xl bg-secondary-container/30 flex flex-col md:flex-row md:items-center justify-between gap-space-md hover:bg-secondary-container/50 transition-colors">
-                    <div className="flex items-start gap-space-md">
-                      <div className="p-2.5 rounded-lg bg-secondary text-on-secondary flex items-center justify-center shrink-0">
-                        <span className="material-symbols-outlined text-[22px]">bolt</span>
-                      </div>
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-space-xs">
-                          <h4 className="font-headline-sm text-headline-sm text-on-surface">
-                            Physics: Electromagnetic Induction
-                          </h4>
-                          <span className="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-secondary text-on-secondary font-semibold">
-                            71% Mastery
-                          </span>
-                        </div>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant">
-                          Faraday's & Lenz's Law vector direction questions need systematic drills
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-space-sm shrink-0">
-                      <button className="px-space-md py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-all flex items-center gap-1 shadow-sm">
-                        <span>Practice Now</span>
-                        <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Comparative Benchmark Chart Representation */}
-              <div className="p-space-md rounded-xl bg-surface-container-low space-y-space-sm">
-                <div className="flex items-center justify-between">
-                  <span className="font-label-md text-label-md text-on-surface font-semibold">
-                    School Cohort Benchmark Comparison
-                  </span>
-                  <div className="flex items-center gap-space-md text-label-sm font-label-sm">
-                    <span className="flex items-center gap-1">
-                      <span className="w-3 h-3 rounded-full bg-primary inline-block" /> Your Score
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className="w-3 h-3 rounded-full bg-outline-variant inline-block" /> School Median (Grade
-                      11)
-                    </span>
-                  </div>
-                </div>
-
-                {/* Subject Comparative Bars */}
-                <div className="space-y-space-sm pt-space-xs">
-                  <div>
-                    <div className="flex justify-between font-label-sm text-label-sm mb-1 text-on-surface-variant">
-                      <span className="font-semibold text-on-surface">Calculus & Advanced Math</span>
-                      <span>Amina: 91% • Benchmark: 74% (+17%)</span>
-                    </div>
-                    <div className="w-full h-3 bg-surface-container rounded-full overflow-hidden relative">
-                      <div
-                        className="absolute left-0 top-0 h-full bg-outline-variant/60 rounded-full"
-                        style={{ width: "74%" }}
-                      />
-                      <div className="absolute left-0 top-0 h-full bg-primary rounded-full" style={{ width: "91%" }} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between font-label-sm text-label-sm mb-1 text-on-surface-variant">
-                      <span className="font-semibold text-on-surface">Chemistry & Life Sciences</span>
-                      <span>Amina: 78% • Benchmark: 72% (+6%)</span>
-                    </div>
-                    <div className="w-full h-3 bg-surface-container rounded-full overflow-hidden relative">
-                      <div
-                        className="absolute left-0 top-0 h-full bg-outline-variant/60 rounded-full"
-                        style={{ width: "72%" }}
-                      />
-                      <div className="absolute left-0 top-0 h-full bg-primary rounded-full" style={{ width: "78%" }} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between font-label-sm text-label-sm mb-1 text-on-surface-variant">
-                      <span className="font-semibold text-on-surface">Physics & Electronics</span>
-                      <span>Amina: 71% • Benchmark: 76% (-5% priority)</span>
-                    </div>
-                    <div className="w-full h-3 bg-surface-container rounded-full overflow-hidden relative">
-                      <div
-                        className="absolute left-0 top-0 h-full bg-outline-variant/60 rounded-full"
-                        style={{ width: "76%" }}
-                      />
-                      <div className="absolute left-0 top-0 h-full bg-error rounded-full" style={{ width: "71%" }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
+                </>
+              )}
             </section>
 
             {/* Lessons Progress & Up Next */}
