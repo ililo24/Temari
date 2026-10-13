@@ -23,7 +23,7 @@ export default function Header() {
   useEffect(() => {
     // AppLayout's guard already guarantees a session before this header
     // renders; this keeps the displayed user in sync with the auth client.
-    supabase.auth.getSession().then(({ session: currentSession }) => {
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
       setSession(currentSession);
     });
 
